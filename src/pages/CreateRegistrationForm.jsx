@@ -25,7 +25,7 @@ function CreateRegistrationForm() {
   useEffect(() => {
     const savedEventId = localStorage.getItem("selectedEvent");
     const savedEventName = localStorage.getItem("eventName");
-    if (savedEventId && savedEveName) {
+    if (savedEventId) {
       const link = `https://events.aurelionfutureforge.com/${savedEventName}/register/${savedEventId}`;
       setFormLink(link);
 
@@ -120,7 +120,7 @@ function CreateRegistrationForm() {
 
       const eventId = response.data.eventId;
       const EventName = response.data.eventName;
-      
+
       const link = `https://events.aurelionfutureforge.com/${EventName}/register/${eventId}`;
       setFormLink(link);
       localStorage.setItem("eventId", eventId);
