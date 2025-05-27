@@ -25,7 +25,7 @@ function CreateRegistrationForm() {
   useEffect(() => {
     const savedEventId = localStorage.getItem("selectedEvent");
     const savedEveName = localStorage.getItem("eventName");
-    if (savedEventId) {
+    if (savedEventId && savedEveName) {
       const savedEventName = savedEveName.replace(/\s+/g, '-');
       const link = `https://events.aurelionfutureforge.com/${savedEventName}/register/${savedEventId}`;
       setFormLink(link);
