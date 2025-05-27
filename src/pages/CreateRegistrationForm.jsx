@@ -21,7 +21,7 @@ function CreateRegistrationForm() {
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const companyName = localStorage.getItem("adminCompany");
   const EventId = localStorage.getItem("selectedEvent");
-  const EventName = localStorage.getItem("eventName");
+  const eventname = localStorage.getItem("eventName");
 
   useEffect(() => {
     const savedEventId = localStorage.getItem("selectedEvent");
@@ -209,10 +209,9 @@ function CreateRegistrationForm() {
           <input
             type="text"
             placeholder="Event name should be same as in the create-event form !"
-            value={eventName}
+            value={eventname}
             onChange={(e) => setEventName(e.target.value)}
             className="border rounded px-3 py-2 w-full mb-4"
-            defaultValue={EventName}
           />
         </div>
 
