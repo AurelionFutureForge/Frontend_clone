@@ -25,11 +25,10 @@ function CreateRegistrationForm() {
   useEffect(() => {
     const savedEventId = localStorage.getItem("selectedEvent");
     const savedEventName = localStorage.getItem("eventName");
-    console.log("saved :",savedEventName);
+    const formattedEventName = savedEventName.replace(/\s+/g, '-')
     if (savedEventId) {
-      const formattedEventName = savedEventName.replace(/\s+/g, '-');
-      console.log(formattedEventName);
       const link = `https://events.aurelionfutureforge.com/${formattedEventName}/register/${savedEventId}`;
+      console.log(link);
       setFormLink(link);
 
       // Fetch roles for the selected event
@@ -123,6 +122,7 @@ function CreateRegistrationForm() {
 
       const eventId = response.data.eventId;
       const EventName = response.data.eventName;
+      console.log("below");
       const formattedEventName = EventName.replace(/\s+/g, '-');
       console.log(formattedEventName)
       const link = `https://events.aurelionfutureforge.com/${formattedEventName}/register/${eventId}`;
