@@ -159,7 +159,7 @@ function AdminDashboard() {
         email.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesRole = roleFilter === "All" || role === roleFilter;
       return matchesSearch && matchesRole;
-    });
+    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   };
 
   const getPrivilegeSummary = () => {
@@ -237,6 +237,11 @@ function AdminDashboard() {
     };
   }, []);
   const comp = companyName.toUpperCase();
+const totalRevenue = users
+  .filter(user => user.paymentStatus === "COMPLETED" && user.registrationData?.amount)
+  .reduce((sum, user) => sum + Number(user.registrationData.amount), 0);
+
+
   return (
 
     <div className="flex flex-row h-screen bg-gradient-to-r from-black to-gray-800 w-full">
@@ -300,10 +305,14 @@ function AdminDashboard() {
             <span className="font-semibold text-black">{comp}</span>
           </p>
 
+          
+
           {/* Event Summary */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 mb-6">
-            <SummaryCard title="Total Registrations" value={totalRegistrations} color="blue" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+            <SummaryCard title="Total Registrations" value={totalRegistrations}/>
+            <SummaryCard title="Revenue" value={`₹${totalRevenue.toFixed(2)}`} />
           </div>
+
 
           {/* Privilege Summary */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">

@@ -357,17 +357,17 @@ function ManualReg() {
 
             return (
               <>
-                <div className="mb-4 text-black font-medium space-y-1 text-sm">
+                <div className="mb-4 text-black font-medium space-y-1 text-md">
                   <p className="flex justify-between">
                     <span>Amount:</span>
                     <span>₹{rolePrice.toFixed(2)}</span>
                   </p>
-                  <p className="flex justify-between">
+                  <p className="flex justify-between text-[12px]">
                     <span>Platform Fee (2.5%):</span>
                     <span>₹{platformFee.toFixed(2)}</span>
                   </p>
                   <hr className="my-1 border-blue-300" />
-                  <p className="flex justify-between font-semibold text-base">
+                  <p className="flex justify-between font-semibold text-xl">
                     <span>Total:</span>
                     <span>₹{totalAmount.toFixed(2)}</span>
                   </p>
@@ -391,14 +391,14 @@ function ManualReg() {
           <div className="mt-8 flex items-center justify-center gap-2">
             <span className="text-gray-600 text-sm mb-2">Powered by</span>
             <Link to="/">
-              <img src={logo} alt="Powered by logo" className="h-12 object-contain" />
+              <img src={logo} alt="Powered by logo" className="h-8 object-contain" />
             </Link>
           </div>
 
         </form>
         <div className="mt-4 text-center">
           <Link to="https://www.aurelionfutureforge.com/" target="_blank" rel="noopener noreferrer">
-            <p className="text-gray-500 text-sm">@An Aurelion Product</p>
+            <p className="text-purple-800 text-sm underline">An Aurelion Product</p>
           </Link>
         </div>
       </div>
