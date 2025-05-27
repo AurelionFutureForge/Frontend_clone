@@ -205,12 +205,12 @@ function SuccessPage() {
         <div className="mt-14 flex items-center justify-center gap-2">
           <span className="text-gray-600 text-sm mb-2">Powered by</span>
           <Link to="/">
-            <img src={logo} alt="Powered by logo" className="h-12 object-contain" />
+            <img src={logo} alt="Powered by logo" className="h-8 object-contain" />
           </Link>
         </div>
         <div className="mt-4 text-center">
           <Link to="https://www.aurelionfutureforge.com/" target="_blank" rel="noopener noreferrer">
-            <p className="text-gray-500 text-sm">@An Aurelion Product</p>
+            <p className="text-purple-800 text-sm underline">An Aurelion Product</p>
           </Link>
         </div>
       </div>
