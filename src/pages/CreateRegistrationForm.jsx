@@ -21,6 +21,7 @@ function CreateRegistrationForm() {
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const companyName = localStorage.getItem("adminCompany");
   const EventId = localStorage.getItem("selectedEvent");
+  const EventName = localStorage.getItem("eventName");
 
   useEffect(() => {
     const savedEventId = localStorage.getItem("selectedEvent");
@@ -152,7 +153,7 @@ function CreateRegistrationForm() {
 
       toast.success("Registration form fields updated successfully!");
     } catch (error) {
-      console.error("❌ Error saving registration fields:", error.response?.data || error.message);
+      console.error("Error saving registration fields:", error.response?.data || error.message);
       toast.error("Failed to update registration form fields.");
     }
   };
@@ -195,7 +196,7 @@ function CreateRegistrationForm() {
       console.error("Toggle form error:", error);
     }
   }
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 flex items-center justify-center p-6">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-3xl">
@@ -211,6 +212,7 @@ function CreateRegistrationForm() {
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
             className="border rounded px-3 py-2 w-full mb-4"
+            defaultValue={EventName}
           />
         </div>
 
