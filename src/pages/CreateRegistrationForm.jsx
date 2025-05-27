@@ -51,7 +51,7 @@ function CreateRegistrationForm() {
                   fieldType: "checkbox", // Change fieldType to checkbox
                   options: roleOptions,
                   required: true,
-                  locked: false,
+                  locked: true,
                 },
               ];
             }
@@ -101,7 +101,7 @@ function CreateRegistrationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!eventName || fields.some((field) => !field.fieldName)) {
+    if (!eventname || fields.some((field) => !field.fieldName)) {
       toast.error("Please fill out all required fields.");
       return;
     }
@@ -147,7 +147,7 @@ function CreateRegistrationForm() {
           fieldType: "checkbox", // Change fieldType to checkbox
           options: roles,
           required: true,
-          locked: false,
+          locked: true,
         },
       ]);
 
@@ -266,7 +266,7 @@ function CreateRegistrationForm() {
               </div>
             )}
 
-            {(field.fieldType === "checkbox" && field.fieldName === "ROLE") && !field.locked && (
+            {(field.fieldType === "checkbox" && field.fieldName === "ROLE") && field.locked && (
               <div className="mt-3">
                 <label className="block font-semibold">Select Roles</label>
                 <div className="space-y-2">
