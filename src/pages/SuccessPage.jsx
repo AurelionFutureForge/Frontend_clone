@@ -74,7 +74,8 @@ function SuccessPage() {
     new Date(event.startDate).toLocaleDateString() ===
     new Date(event.endDate).toLocaleDateString();
 
-  const EventName = event.eventName;
+  const EveName = event.eventName;
+  const EventName = EveName.replace(/\s+/g, '-');
 
   const downloadInvoice = async () => {
     const invoiceElement = document.getElementById("invoice");
