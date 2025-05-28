@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Calendar, BarChart3, Users, ArrowUpRight, Shield, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star } from 'lucide-react';
+import { Calendar, BarChart3, Users, ArrowUpRight, Shield, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X } from 'lucide-react';
 import { useState, useEffect } from "react";
 
 function Home() {
@@ -47,13 +47,13 @@ function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar */}
-      <nav className="fixed bg-white backdrop-blur-md p-6 shadow-md w-full z-2">
+      <nav className="fixed bg-white backdrop-blur-md p-6 shadow-md w-full z-20">
         <div className="container mx-auto flex items-center justify-between text-gray-500">
 
           {/* Logo + Desktop Nav */}
           <div className="flex items-center space-x-8 ml-4">
             <Link to="/">
-            <h1 className="text-2xl font-bold whitespace-nowrap text-black">Stagyn.io</h1>
+              <h1 className="text-2xl font-bold whitespace-nowrap text-black">Stagyn.io</h1>
             </Link>
 
             {/* Desktop Menu */}
@@ -86,21 +86,42 @@ function Home() {
 
         {/* Mobile Menu Content */}
         {menuOpen && (
-          <div className="md:hidden flex flex-col items-start px-6 pt-4 space-y-4 text-black">
-            <Link to="/" className="flex items-center space-x-2 hover:text-gray-700">
+          <div
+            className="fixed inset-0 bg-transparent bg-opacity-40 z-30 md:hidden"
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
+
+        {/* Sidebar */}
+        <aside
+          className={`fixed z-40 top-0 left-0 h-full w-64 bg-white text-black flex flex-col p-6 space-y-6  shadow-lg transform transition-transform duration-300 md:hidden ${menuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+        >
+          <div className="text-2xl font-bold tracking-wide flex justify-between items-center">
+            <Link to="/"><p>Stagyn.io</p></Link>
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="p-1"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <nav className="flex flex-col gap-5 text-sm bg-white min-h-screen ml-[-24px] pl-4">
+            <Link to="/" className="flex items-center space-x-5 hover:text-red-600">
               <Calendar className="w-5 h-5" />
               <span>Events</span>
             </Link>
-            <Link to="/" className="flex items-center space-x-2 hover:text-gray-700">
+            <Link to="/" className="flex items-center space-x-5 hover:text-red-600">
               <BarChart3 className="w-5 h-5" />
               <span>Analytics</span>
             </Link>
-            <Link to="/" className="flex items-center space-x-2 hover:text-gray-700">
+            <Link to="/" className="flex items-center space-x-5 hover:text-red-600">
               <Users className="w-5 h-5" />
               <span>Attendees</span>
             </Link>
-          </div>
-        )}
+          </nav>
+        </aside>
       </nav>
 
       {/* Hero Section */}
