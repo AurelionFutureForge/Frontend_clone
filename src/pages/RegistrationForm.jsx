@@ -7,6 +7,22 @@ import logo from '../assets/stagyn_black.png'
 import { ShieldCheck } from 'lucide-react'
 import { Link } from 'react-router-dom';
 
+
+function extractContact(registrationData = {}) {
+  const contactField = Object.keys(registrationData).find((key) => {
+    const lowerKey = key.toLowerCase();
+    return (
+      lowerKey.includes("contact") ||
+      lowerKey.includes("mobile") ||
+      lowerKey.includes("phone") ||
+      lowerKey.includes("number")
+    );
+  });
+
+  const contact = contactField ? registrationData[contactField] : "";
+  return contact;
+}
+
 function RegistrationForm() {
   const [event, setEvent] = useState(null);
   const [formData, setFormData] = useState({});
@@ -17,7 +33,6 @@ function RegistrationForm() {
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const { eventID } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -159,6 +174,13 @@ function RegistrationForm() {
   const handlePayment = async () => {
     if (!formData[roleField?.fieldName]) {
       toast.error("Please select a role before proceeding.");
+      return;
+    }
+
+    const contactNumber = extractContact(formData).toString().replace(/\D/g, ""); 
+
+    if (!/^\d{10}$/.test(contactNumber)) {
+      toast.error("Please enter a valid 10-digit contact number.");
       return;
     }
 
