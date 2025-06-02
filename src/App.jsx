@@ -20,6 +20,8 @@ import EventList from './pages/EventList';
 import ManualReg from './pages/ManualReg';
 import Login from './pages/Login';
 import PaymentSuccess from './pages/PaymentSuccess';
+import ResetPasswordRequest from './pages/ResetPasswordRequest';
+import ResetPassword from './pages/ResetPassword'
 
 
 const App = () => {
@@ -43,6 +45,8 @@ const App = () => {
         <Route path='/manual-registration' element={<ProtectedRoute> <ManualReg /> </ ProtectedRoute>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/payment-success' element={<PaymentSuccess/>} />
+        <Route path="/reset-password" element={<ResetPasswordRequest />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         
       </Routes>
     </div>

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Calendar, BarChart3, Users, ArrowUpRight, Shield, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X } from 'lucide-react';
-import { useState, useEffect } from "react";
+import { Calendar, BarChart3, Banknote, Users, ArrowUpRight, Shield, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X } from 'lucide-react';
+import { useState, useEffect, useRef } from "react";
+import logo from '../assets/stagyn_black.png'
 
 function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -8,6 +9,36 @@ function Home() {
   const [lastName, setLastName] = useState("Doe");
   const [ticket, setTicket] = useState("General Admission $500");
   const [mail, setMail] = useState("john@example.com");
+  const eventsRef = useRef(null);
+  const analyticsRef = useRef(null);
+  const attendeesRef = useRef(null);
+
+  const scrollToEvents = () => {
+    if (eventsRef.current) {
+      const yOffset = 130;
+      const y = eventsRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
+  const scrollToAnalytics = () => {
+    if (analyticsRef.current) {
+      const yOffset = -85;
+      const y = analyticsRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  }
+
+  const scrollToAttendees = () => {
+    if (attendeesRef.current) {
+      const yOffset = -68;
+      const y = attendeesRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  }
 
   const handleContinue = (e) => {
     e.preventDefault();
@@ -53,20 +84,29 @@ function Home() {
           {/* Logo + Desktop Nav */}
           <div className="flex items-center space-x-8 ml-4">
             <Link to="/">
-              <h1 className="text-2xl font-bold whitespace-nowrap text-black">Stagyn.io</h1>
+              <img className="w-38 h-10 whitespace-nowrap text-black" src={logo} />
             </Link>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link to="/" className="flex items-center space-x-2 hover:text-gray-700">
+              <Link to="/" className="flex items-center space-x-2 hover:text-gray-700" onClick={(e) => {
+                e.preventDefault();
+                scrollToEvents(e);
+              }}>
                 <Calendar className="w-5 h-5" />
                 <span>Events</span>
               </Link>
-              <Link to="/" className="flex items-center space-x-2 hover:text-gray-700">
+              <Link to="/" className="flex items-center space-x-2 hover:text-gray-700" onClick={(e) => {
+                e.preventDefault();
+                scrollToAnalytics(e);
+              }}>
                 <BarChart3 className="w-5 h-5" />
                 <span>Analytics</span>
               </Link>
-              <Link to="/" className="flex items-center space-x-2 hover:text-gray-700">
+              <Link to="/" className="flex items-center space-x-2 hover:text-gray-700" onClick={(e) => {
+                e.preventDefault();
+                scrollToAttendees(e);
+              }}>
                 <Users className="w-5 h-5" />
                 <span>Attendees</span>
               </Link>
@@ -107,16 +147,25 @@ function Home() {
             </button>
           </div>
 
-          <nav className="flex flex-col gap-5 text-sm bg-white min-h-screen ml-[-24px] pl-4">
-            <Link to="/" className="flex items-center space-x-5 hover:text-red-600">
+          <nav className="flex flex-col gap-5 text-sm bg-white min-h-screen ml-[-24px] pl-4 w-[255px]">
+            <Link to="/" className="flex items-center space-x-5 hover:text-red-600" onClick={(e) => {
+                e.preventDefault();
+                scrollToEvents(e);
+              }}>
               <Calendar className="w-5 h-5" />
               <span>Events</span>
             </Link>
-            <Link to="/" className="flex items-center space-x-5 hover:text-red-600">
+            <Link to="/" className="flex items-center space-x-5 hover:text-red-600" onClick={(e) => {
+                e.preventDefault();
+                scrollToAnalytics(e);
+              }}>
               <BarChart3 className="w-5 h-5" />
               <span>Analytics</span>
             </Link>
-            <Link to="/" className="flex items-center space-x-5 hover:text-red-600">
+            <Link to="/" className="flex items-center space-x-5 hover:text-red-600" onClick={(e) => {
+                e.preventDefault();
+                scrollToAttendees(e);
+              }}>
               <Users className="w-5 h-5" />
               <span>Attendees</span>
             </Link>
@@ -125,66 +174,68 @@ function Home() {
       </nav>
 
       {/* Hero Section */}
-      <header className="mt-20 flex flex-col items-center justify-center text-center p-8 md:p-12 bg-gradient-to-r from-black to-gray-800 text-white">
-        <h1 className="text-3xl md:text-7xl font-bold mb-4 mt-20">Intelligent Event <br /> <span className="text-red-400">Registration</span> <br /> to Analytics Platform</h1>
-        <p className="text-md md:text-2xl mt-2 max-w-5xl">
-          Transform your events with AI-powered insights. From seamless registration to deep analytics, stagyn.io revolutionizes how you manage and understand your events.
-        </p>
-        <div className="mt-8 space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
-          <Link to="/login" className="px-12 py-3 bg-red-700 text-white font-semibold rounded-lg shadow hover:bg-red-800 transition">
-            Login
-          </Link>
-          <Link to="/admin/register" className="px-6 py-3 bg-white text-black font-semibold rounded-lg shadow hover:bg-gray-200 transition">
-            Create Your First Event
-          </Link>
-        </div>
-
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 md:px-20">
-
-          <div
-            className="mt-10 p-6 rounded-2xl shadow-md transform transition duration-300 hover:-translate-y-2 hover:shadow-xl text-center"
-            style={{ backgroundColor: "rgba(245, 245, 245, 0.1)" }}
-          >
-            <BarChart3 className="mx-auto mb-4 w-15 h-15 text-red-500" />
-            <h3 className="text-xl font-semibold mb-2 text-white">Real-Time Analytics</h3>
-            <p className="text-gray-300">
-              Get instant insights into registration patterns, attendee behavior, and event performance.
-            </p>
+      <section ref={eventsRef} id="events">
+        <header className="mt-20 flex flex-col items-center justify-center text-center p-8 md:p-12 bg-gradient-to-r from-black to-gray-800 text-white">
+          <h1 className="text-3xl md:text-7xl font-bold mb-4 mt-20">Intelligent Event <br /> <span className="text-red-400">Registration</span> <br /> to Analytics Platform</h1>
+          <p className="text-md md:text-2xl mt-2 max-w-5xl">
+            Transform your events with AI-powered insights. From seamless registration to deep analytics, stagyn.io revolutionizes how you manage and understand your events.
+          </p>
+          <div className="mt-8 space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
+            <Link to="/login" className="px-12 py-3 bg-red-700 text-white font-semibold rounded-lg shadow hover:bg-red-800 transition">
+              Login
+            </Link>
+            <Link to="/admin/register" className="px-6 py-3 bg-white text-black font-semibold rounded-lg shadow hover:bg-gray-200 transition">
+              Create Your First Event
+            </Link>
           </div>
 
-          <div
-            className="mt-10 p-6 rounded-2xl shadow-md transform transition duration-300 hover:-translate-y-2 hover:shadow-xl text-center"
-            style={{ backgroundColor: "rgba(245, 245, 245, 0.1)" }}
-          >
-            <Zap className="mx-auto mb-4 w-15 h-15 text-red-500" />
-            <h3 className="text-xl font-semibold mb-2 text-white">Lightning Fast</h3>
-            <p className="text-gray-300">
-              Ultra-fast registration process with intelligent form optimization and instant confirmations.
-            </p>
-          </div>
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 md:px-20">
 
-          {/* Card 2 */}
-          <div
-            className="mt-10 p-6 rounded-2xl shadow-md transform transition duration-300 hover:-translate-y-2 hover:shadow-xl text-center"
-            style={{ backgroundColor: "rgba(245, 245, 245, 0.1)" }}
-          >
-            <Shield className="mx-auto mb-4 w-15 h-15 text-red-500" />
-            <h3 className="text-xl font-semibold mb-2 text-white">Enterprise Security</h3>
-            <p className="text-gray-300">
-              Bank-level security with GDPR compliance and advanced fraud detection.
-            </p>
-          </div>
+            <div
+              className="mt-10 p-6 rounded-2xl shadow-md transform transition duration-300 hover:-translate-y-2 hover:shadow-xl text-center"
+              style={{ backgroundColor: "rgba(245, 245, 245, 0.1)" }}
+            >
+              <BarChart3 className="mx-auto mb-4 w-15 h-15 text-red-500" />
+              <h3 className="text-xl font-semibold mb-2 text-white">Real-Time Analytics</h3>
+              <p className="text-gray-300">
+                Get instant insights into registration patterns, attendee behavior, and event performance.
+              </p>
+            </div>
 
-        </section>
-        <br />
-        <br />
-        <br />
+            <div
+              className="mt-10 p-6 rounded-2xl shadow-md transform transition duration-300 hover:-translate-y-2 hover:shadow-xl text-center"
+              style={{ backgroundColor: "rgba(245, 245, 245, 0.1)" }}
+            >
+              <Zap className="mx-auto mb-4 w-15 h-15 text-red-500" />
+              <h3 className="text-xl font-semibold mb-2 text-white">Lightning Fast</h3>
+              <p className="text-gray-300">
+                Ultra-fast registration process with intelligent form optimization and instant confirmations.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div
+              className="mt-10 p-6 rounded-2xl shadow-md transform transition duration-300 hover:-translate-y-2 hover:shadow-xl text-center"
+              style={{ backgroundColor: "rgba(245, 245, 245, 0.1)" }}
+            >
+              <Banknote className="mx-auto mb-4 w-15 h-15 text-red-500" />
+              <h3 className="text-xl font-semibold mb-2 text-white">Instant Payout</h3>
+              <p className="text-gray-300">
+                Payments during registration process will be settled on the same day or T+1 day.
+              </p>
+            </div>
+
+          </section>
+          <br />
+          <br />
+          <br />
 
 
-      </header>
+        </header>
+      </section>
 
       {/* Event Info Section */}
-      <section className="container mx-auto text-center p-6 md:p-12">
+      <section className="container mx-auto text-center p-6 md:p-12" ref={analyticsRef} id="analytics">
         <h1 className=" text-3xl md:text-5xl font-bold mb-4">Powerful Analytics Dashboard</h1>
         <p className="text-sm md:text-lg max-w-3xl mx-auto text-gray-700">
           Get comprehensive insights into your events with our intelligent analytics platform. Make data-driven decisions to optimize your event success.
@@ -244,7 +295,7 @@ function Home() {
         </div>
       </section>
 
-      <main className="p-6">
+      <main className="p-6" ref={attendeesRef}>
         <div className="bg-gradient-to-r from-gray-900 to-black text-white  px-8 py-8 rounded-md max-w-4xl mx-auto">
           <h2 className="text-2xl font-semibold">Event Performance Overview</h2>
           <p className="text-sm text-gray-300 mt-2">Real-time insights for Tech Conference 2024</p>

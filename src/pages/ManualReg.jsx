@@ -404,7 +404,7 @@ function ManualReg() {
                 </button>
                 <div className="flex items-center justify-center space-x-2 mt-5">
                   <ShieldCheck className="w-7 h-7 text-green-600" />
-                  <p className="font-semibold">Safe & Secure Payment</p>
+                  <p className="font-normal">Safe & Secure Payment</p>
                 </div>
               </>
             );
@@ -413,7 +413,7 @@ function ManualReg() {
           <div className="mt-8 flex items-center justify-center gap-2">
             <span className="text-gray-600 text-sm mb-2">Powered by</span>
             <Link to="/">
-              <img src={logo} alt="Powered by logo" className="h-8 object-contain" />
+              <img src={logo} alt="Powered by logo" className="h-7 object-contain" />
             </Link>
           </div>
 

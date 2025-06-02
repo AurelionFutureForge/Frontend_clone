@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, MapPin, Calendar, Clock } from 'lucide-react'
 import { useParams, useNavigate } from "react-router-dom";
 import logo from '../assets/stagyn_black.png'
 import { ShieldCheck } from 'lucide-react'
@@ -177,7 +177,7 @@ function RegistrationForm() {
       return;
     }
 
-    const contactNumber = extractContact(formData).toString().replace(/\D/g, ""); 
+    const contactNumber = extractContact(formData).toString().replace(/\D/g, "");
 
     if (!/^\d{10}$/.test(contactNumber)) {
       toast.error("Please enter a valid 10-digit contact number.");
@@ -240,9 +240,10 @@ function RegistrationForm() {
           Register for {event.eventName}
         </h2>
 
-        <div className="text-center text-gray-600 mb-6">
+        <div className="text-center text-gray-600 mb-6 space-y-2">
           {event.startDate && (
-            <p>
+            <p className="flex justify-center items-center gap-2">
+              <Calendar className="w-4 h-4 text-purple-500" />
               <span className="font-semibold">Date:</span>{" "}
               {event.endDate &&
                 !isNaN(new Date(event.endDate)) &&
@@ -251,18 +252,21 @@ function RegistrationForm() {
                 : new Date(event.startDate).toLocaleDateString()}
             </p>
           )}
+
           {event.place && (
-            <p>
+            <p className="flex justify-center items-center gap-2">
+              <MapPin className="w-4 h-4 text-blue-500" />
               <span className="font-semibold">Location:</span> {event.place}
             </p>
           )}
+
           {event.time && (
-            <p>
+            <p className="flex justify-center items-center gap-2">
+              <Clock className="w-4 h-4 text-orange-500" />
               <span className="font-semibold">Time:</span> {event.time}
             </p>
           )}
         </div>
-
         <form>
           {otherFields.map((field, idx) => (
             <div key={idx} className="mb-4">
@@ -375,7 +379,7 @@ function RegistrationForm() {
                         />
                         <span className="font-medium">{option}</span>
                         <span className="text-sm text-blue-600 font-semibold ml-auto">
-                          ₹{price}<span className="text-red-800">*</span>
+                          ₹{price.toLocaleString("en-IN")}<span className="text-red-800">*</span>
                         </span>
                       </div>
                       {matchingRole?.roleDescription && (
@@ -428,7 +432,7 @@ function RegistrationForm() {
                     </button>
                     <div className="flex items-center justify-center space-x-2 mt-5">
                       <ShieldCheck className="w-7 h-7 text-green-600" />
-                      <p className="font-semibold">Safe & Secure Payment</p>
+                      <p className="font-normal">Safe & Secure Payment</p>
                     </div>
                   </div>
                 );
@@ -438,7 +442,7 @@ function RegistrationForm() {
           <div className="mt-8 flex items-center justify-center gap-2">
             <span className="text-gray-600 text-sm mb-2">Powered by</span>
             <Link to="/">
-              <img src={logo} alt="Powered by logo" className="h-8 object-contain" />
+              <img src={logo} alt="Powered by logo" className="h-7 object-contain" />
             </Link>
           </div>
         </form>

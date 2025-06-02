@@ -23,14 +23,14 @@ function AdminLogin() {
         // Store the admin token and company name in localStorage
         localStorage.setItem("admin_token", response.data.token);
         localStorage.setItem("adminCompanyName", response.data.admin.companyName);
-        localStorage.setItem("adminEmail",response.data.admin.email);
+        localStorage.setItem("adminEmail", response.data.admin.email);
 
         // Success message
         toast.success("Login Successful!");
 
         // Redirect to the dashboard after login
         navigate("/event-list");
-      } else if(role == "privilege") {
+      } else if (role == "privilege") {
         const res = await axios.post(`${BASE_URL}/privilege/login`, {
           email,
           password,
@@ -71,7 +71,7 @@ function AdminLogin() {
               onChange={(e) => setRole(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
               disabled={loading}
-            > 
+            >
               <option value="please select">Please Select</option>
               <option value="admin">Admin</option>
               <option value="privilege">Privilege</option>
@@ -116,6 +116,14 @@ function AdminLogin() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+        {role === 'admin' && (
+        <p
+          className="text-sm text-blue-600 mt-2 cursor-pointer hover:underline text-right"
+          onClick={() => navigate('/reset-password')}
+        >
+          Forgot password?
+        </p>
+        )}
 
         <p className="text-gray-600 text-center mt-4 text-sm">
           Choose your role to proceed. Unauthorized access will be denied.

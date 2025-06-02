@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from "react-hot-toast";
-import { CalendarDays, MapPin, Clock3, Building2, PencilLine } from 'lucide-react'
-import { Link } from 'react-router-dom';
+import { CalendarDays, MapPin, Clock3, Building2, PencilLine, PlusCircle, Menu, X } from 'lucide-react'
+import { Link, NavLink } from 'react-router-dom';
 
 export default function EventCreation() {
   const [events, setEvents] = useState([]);
@@ -26,6 +26,7 @@ export default function EventCreation() {
   const [privilege, setPrivilege] = useState('');
   const [rolePrice, setRolePrice] = useState('');
   const [roleMaxReg, setRoleMaxReg] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
@@ -176,6 +177,10 @@ export default function EventCreation() {
     navigate(`/edit-event/${eventID}`);
   };
 
+  const handleCreateRegForm = (eventID) => {
+    navigate('/event-list');
+  }
+
   const handleLogout = () => {
     // Example: Clear token or session
     localStorage.removeItem("admin_token");
@@ -184,26 +189,54 @@ export default function EventCreation() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-r from-black to-gray-800">
-      <nav className="bg-black-600 p-4 shadow-md">
-        <div className="container mx-auto flex justify-between items-center text-white">
-          {/* Left: Logo */}
-         <Link to="/"><h1 className="text-2xl font-bold">Stagyn.io</h1></Link> 
-
-          {/* Right: Links + Logout */}
-          <div className="flex items-center space-x-8">
-            <a href="/event-list" className="hover:text-gray-200">Admin</a>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
-            >
-              Logout
-            </button>
-          </div>
+    <div className="min-h-screen flex flex-row bg-gradient-to-r from-black to-gray-800">
+      <aside
+        className={`fixed z-40 top-0 left-0 min-h-screen w-[301px] bg-white text-black flex flex-col p-6 space-y-6 shadow-lg transform transition-transform duration-300 sm:static sm:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+      >
+        <div className="text-2xl font-bold tracking-wide flex justify-between items-center">
+          <NavLink to='/'><p>Stagyn.io</p></NavLink>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="sm:hidden p-1"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
-      </nav>
+        <nav className="flex flex-col gap-4 text-sm">
+          <NavLink
+            to="/create-event"
+            className={({ isActive }) =>
+              `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "hover:bg-red-600 text-black" : "hover:bg-red-600"
+              }`
+            }
+          >
+            Create Event
+          </NavLink>
+          <NavLink
+            to="/event-list"
+            className={({ isActive }) =>
+              `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "hover:bg-red-600 text-black" : "hover:bg-red-600"
+              }`
+            }
+          >
+            Events
+          </NavLink>
+          <button
+            onClick={handleLogout}
+            className="hover:bg-red-600 w-full transition-colors px-4 py-2 rounded flex items-center gap-2 text-left focus:outline-none"
+          >
+            Logout
+          </button>
+        </nav>
 
 
+      </aside>
+      <header className="bg-transparent px-1 py-4 lg:flex justify-between lg:items-center text-white">
+        <button className="lg:hidden" onClick={() => setSidebarOpen(true)}>
+          <Menu className="w-6 h-6" />
+        </button>
+      </header>
       <section className="container mx-auto text-center p-6 md:p-12">
         <h3 className="text-3xl font-semibold text-white mb-4">Your Events</h3>
 
@@ -248,7 +281,16 @@ export default function EventCreation() {
                     : new Date(event.startDate).toLocaleDateString()}
                 </p>
 
-                <div className="mt-6 flex justify-end">
+                <div className="mt-6 flex justify-end gap-4">
+                  {(!event.registrationFields || event.registrationFields.length === 0) && (
+                    <button
+                      onClick={() => handleCreateRegForm(event._id)}
+                      className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition"
+                    >
+                      <PlusCircle className="w-4 h-4" />
+                      Create Reg Form
+                    </button>
+                  )}
                   <button
                     onClick={() => handleEditEvent(event._id)}
                     className="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition"
@@ -256,6 +298,7 @@ export default function EventCreation() {
                     <PencilLine className="w-4 h-4" />
                     Edit Event
                   </button>
+
                 </div>
               </div>
             ))
@@ -394,7 +437,7 @@ export default function EventCreation() {
             />
 
             <div className="mb-6">
-              <label className="block mb-2 text-lg font-semibold">Upload Event Logo</label>
+              <label className="block mb-2 text-lg font-semibold">Upload Event Banner</label>
               <input
                 type="file"
                 placeholder='Upload the event logo to appear in the registration form'
@@ -404,7 +447,7 @@ export default function EventCreation() {
             </div>
 
             {error && <p className="text-red-600">{error}</p>}
-<br />
+            <br />
             <div className="flex justify-center space-x-4">
               <button
                 onClick={handleSubmit}

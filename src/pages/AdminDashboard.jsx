@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Menu, X } from 'lucide-react';
+import { Menu, X, PlusCircle, Copy } from 'lucide-react';
 import { NavLink } from "react-router-dom";
 
 // Utility to dynamically extract name & email from registrationData
@@ -63,6 +63,7 @@ function AdminDashboard() {
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const companyName = localStorage.getItem("adminCompanyName");
   const selectedEvent = localStorage.getItem("selectedEvent");
+  const EventName = localStorage.getItem("eventName");
   const [registrationFields, setRegistrationFields] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -237,9 +238,20 @@ function AdminDashboard() {
     };
   }, []);
   const comp = companyName.toUpperCase();
-const totalRevenue = users
-  .filter(user => user.paymentStatus === "COMPLETED" && user.registrationData?.amount)
-  .reduce((sum, user) => sum + Number(user.registrationData.amount), 0);
+  const totalRevenue = users
+    .filter(user => user.paymentStatus === "COMPLETED" && user.registrationData?.amount)
+    .reduce((sum, user) => sum + Number(user.registrationData.amount), 0);
+
+  const copyRegForm = () => {
+    const formattedEventName = EventName.replace(/\s+/g, '-');
+    const formLink = `https://events.aurelionfutureforge.com/${formattedEventName}/register/${selectedEvent}`;
+    if (formLink) {
+      navigator.clipboard.writeText(formLink);
+      toast.success("Link copied to clipboard!");
+    } else {
+      toast.error("No link to copy.");
+    }
+  }
 
 
   return (
@@ -261,22 +273,22 @@ const totalRevenue = users
         </div>
         <nav className="flex flex-col gap-4 text-sm">
           <NavLink
-            to="/event-list"
+            to="/create-event"
             className={({ isActive }) =>
               `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "bg-red-600 text-white" : "hover:bg-red-600"
               }`
             }
           >
-            Events
+            Create Event
           </NavLink>
           <NavLink
-            to="/create-event"
+            to="/event-list"
             className={({ isActive }) =>
               `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "bg-red-600 text-white" : "hover:bg-red-600 active:bg-red-600"
               }`
             }
           >
-            Create Event
+            Events
           </NavLink>
           <button
             onClick={handleLogout}
@@ -305,11 +317,11 @@ const totalRevenue = users
             <span className="font-semibold text-black">{comp}</span>
           </p>
 
-          
+
 
           {/* Event Summary */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-            <SummaryCard title="Total Registrations" value={totalRegistrations}/>
+            <SummaryCard title="Total Registrations" value={totalRegistrations} />
             <SummaryCard title="Revenue" value={`₹${totalRevenue.toFixed(2)}`} />
           </div>
 
@@ -360,7 +372,22 @@ const totalRevenue = users
               </select>
             </div>
 
-            <div className="flex justify-end mb-4 relative" ref={menuRef}>
+            <div className="flex justify-end mb-4 relative gap-8" ref={menuRef}>
+              {registrationFields.length === 0 ? (
+                <button
+                  onClick={() => navigate("/create-regform")}
+                  className="px-4 py-2 flex items-center gap-2 text-sm bg-blue-600 rounded-full hover:bg-blue-700 text-white"
+                >
+                  <PlusCircle className="w-4 h-4" />
+                  Create Registration Form
+                </button>
+              ) : <button
+                onClick={copyRegForm}
+                className="px-4 py-2 flex items-center gap-2 text-sm bg-blue-600 rounded-full hover:bg-blue-700 text-white">
+                <Copy className="w-4 h-4" />
+                Copy Reg Form
+              </button>}
+
               <button
                 onClick={() => setShowMenu((prev) => !prev)}
                 className="bg-gray-800 text-white p-2 rounded-full hover:bg-gray-900 shadow"

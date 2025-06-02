@@ -70,13 +70,13 @@ function EventList() {
         </div>
         <nav className="flex flex-col gap-4 text-sm">
           <NavLink
-            to="/event-list"
+            to="/create-event"
             className={({ isActive }) =>
               `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "hover:bg-red-600 text-black" : "hover:bg-red-600"
               }`
             }
           >
-            Admin
+            Create Event
           </NavLink>
           <NavLink
             to="/create-event"

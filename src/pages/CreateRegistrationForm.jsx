@@ -330,7 +330,7 @@ function CreateRegistrationForm() {
 
           <button
             onClick={handleSubmit}
-            className="bg-red-600 border border-gray-300 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition w-full sm:w-auto"
+            className="bg-green-700 border border-gray-300 text-white px-4 py-2 rounded-xl hover:bg-green-800 transition w-full sm:w-auto"
           >
             Save Registration Form
           </button>
@@ -359,7 +359,7 @@ function CreateRegistrationForm() {
           <div className="mt-4">
             <button
               onClick={handleCopyLink}
-              className="bg-red-600 border border-gray-300 text-white px-6 py-2 rounded-4xl hover:bg-red-700 w-full"
+              className="bg-blue-600 border border-gray-300 text-white px-6 py-2 rounded-4xl hover:bg-blue-700 w-full"
             >
               Copy Registration Form Link
             </button>

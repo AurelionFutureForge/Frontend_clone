@@ -92,6 +92,12 @@ function EventLogin() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+        <p
+          className="text-sm text-blue-600 mt-2 cursor-pointer hover:underline text-right"
+          onClick={() => navigate('/reset-password')}
+        >
+          Forgot password?
+        </p>
 
         <p className="text-gray-600 text-center mt-4 text-sm">
           Admin access only. Unauthorized users will be denied.
