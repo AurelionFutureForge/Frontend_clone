@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react"
 
 function AdminRegister() {
   const [email, setEmail] = useState("");
@@ -10,25 +11,26 @@ function AdminRegister() {
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     try {
       // Register admin and get token and company details
       const response = await axios.post(`${BASE_URL}/admin/register`, { email, password, companyName });
-  
+
       // Store token and company details in localStorage (log the user in)
       localStorage.setItem("admin_token", response.data.token);
       localStorage.setItem("adminCompanyName", response.data.companyName);
       localStorage.setItem("adminEmail", response.data.adminEmail);
-  
-  
+
+
       toast.success("Admin registered successfully!");
-      
+
       // After successful registration, redirect to create-event page
       navigate("/create-event");
     } catch (error) {
@@ -37,7 +39,7 @@ function AdminRegister() {
       setLoading(false);
     }
   };
-  
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-gray-800 p-6">
@@ -58,17 +60,23 @@ function AdminRegister() {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-gray-700 font-medium">Password</label>
             <input
-              type="password"
-              className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+              type={showPassword ? "text" : "password"}
+              className="w-full p-3 pr-10 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
-              disabled={loading}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-[42px] text-gray-600"
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
           </div>
 
           <div>

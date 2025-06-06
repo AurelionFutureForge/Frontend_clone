@@ -34,6 +34,7 @@ export default function EditEvent() {
       try {
         const res = await axios.get(`${BASE_URL}/events/edit/${eventId}`);
         const event = res.data;
+        console.log("event :",event);
 
         const rolesWithPrivilegesString = event.eventRoles.map(role => ({
           ...role,
@@ -176,6 +177,9 @@ export default function EditEvent() {
     }
   };
 
+  const sDate = eventDetails.startDate ? new Date(eventDetails.startDate).toISOString().split("T")[0] : "";
+  const eDate = eventDetails.endDate ? new Date(eventDetails.endDate).toISOString().split("T")[0] : ""; 
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-black to-gray-800 p-6">
       <h1 className="text-3xl text-white font-bold mb-6 text-center">Edit Event</h1>
@@ -195,14 +199,14 @@ export default function EditEvent() {
 
         <input type="date" name="startDate"
           className="w-full p-3 mb-4 border rounded"
-          value={eventDetails.startDate} onChange={handleChange} />
+          value={sDate} onChange={handleChange} />
 
         {eventDetails.endDate && (
           <input
             type="date"
             name="endDate"
             className="w-full p-3 mb-4 border rounded"
-            value={eventDetails.endDate}
+            value={eDate}
             onChange={handleChange}
           />
         )}
@@ -257,7 +261,7 @@ export default function EditEvent() {
                 <div>
                   <strong>{role.roleName}</strong> — {role.roleDescription}<br />
                   <small className="text-sm text-gray-600">Privileges: {role.privileges}</small><br />
-                  <small className="text-sm text-gray-600">Price: ${role.rolePrice}</small><br />
+                  <small className="text-sm text-gray-600">Price: &#8377;{role.rolePrice}</small><br />
                   <small className="text-sm text-gray-600">Max Registrations: {role.maxRegistrations}</small>
                 </div>
                 <div className="flex flex-col items-end space-y-16 ml-2">

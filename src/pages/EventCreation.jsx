@@ -190,6 +190,7 @@ export default function EventCreation() {
 
   return (
     <div className="min-h-screen flex flex-row bg-gradient-to-r from-black to-gray-800">
+
       <aside
         className={`fixed z-40 top-0 left-0 min-h-screen w-[301px] bg-white text-black flex flex-col p-6 space-y-6 shadow-lg transform transition-transform duration-300 sm:static sm:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
@@ -229,17 +230,14 @@ export default function EventCreation() {
             Logout
           </button>
         </nav>
-
-
       </aside>
-      <header className="bg-transparent px-1 py-4 lg:flex justify-between lg:items-center text-white">
-        <button className="lg:hidden" onClick={() => setSidebarOpen(true)}>
-          <Menu className="w-6 h-6" />
-        </button>
-      </header>
       <section className="container mx-auto text-center p-6 md:p-12">
+        <header className="bg-transparent px-1 py-4 text-white flex justify-start">
+          <button className="sm:hidden" onClick={() => setSidebarOpen(true)}>
+            <Menu className="w-6 h-6" />
+          </button>
+        </header>
         <h3 className="text-3xl font-semibold text-white mb-4">Your Events</h3>
-
         <div className="space-y-6">
           {events.length === 0 ? (
             <p className="text-white text-center text-lg">🎉 No events created yet. Add a new event!</p>

@@ -254,11 +254,13 @@ function RegistrationForm() {
           )}
 
           {event.place && (
-            <p className="flex justify-center items-center gap-2">
+            <div className="flex justify-center items-center gap-2 text-sm sm:text-base">
               <MapPin className="w-4 h-4 text-blue-500" />
-              <span className="font-semibold">Location:</span> {event.place}
-            </p>
+              <span className="font-semibold">Location:</span>
+              <span>{event.place}</span>
+            </div>
           )}
+
 
           {event.time && (
             <p className="flex justify-center items-center gap-2">

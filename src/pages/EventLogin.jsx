@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react"
 
 function EventLogin() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ function EventLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
@@ -70,17 +72,23 @@ function EventLogin() {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-gray-700 font-medium">Password</label>
             <input
-              type="password"
-              className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+              type={showPassword ? "text" : "password"}
+              className="w-full p-3 pr-10 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Enter your password"
-              disabled={loading}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-[42px] text-gray-600"
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
           </div>
 
           <button

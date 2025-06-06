@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import logo from '../assets/stagyn_black.png'
-import { ShieldCheck } from 'lucide-react'
+import { ShieldCheck,MapPin, Calendar, Clock } from 'lucide-react'
 import { Link } from "react-router-dom";
 
 function extractContact(registrationData = {}) {
@@ -201,7 +201,7 @@ function ManualReg() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 p-6">
+    <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 p-6  flex flex-col items-center justify-between">
       <div className="bg-white p-6 shadow-xl rounded-2xl max-w-2xl mx-auto">
         {event.companyPoster && (
           <div className="flex justify-center mb-4">
@@ -216,9 +216,10 @@ function ManualReg() {
           Register for {event.eventName}
         </h2>
 
-        <div className="text-center text-gray-600 mb-6">
+        <div className="text-center text-gray-600 mb-6 space-y-2">
           {event.startDate && (
-            <p>
+            <p className="flex justify-center items-center gap-2">
+              <Calendar className="w-4 h-4 text-purple-500" />
               <span className="font-semibold">Date:</span>{" "}
               {event.endDate &&
                 !isNaN(new Date(event.endDate)) &&
@@ -228,12 +229,15 @@ function ManualReg() {
             </p>
           )}
           {event.place && (
-            <p>
-              <span className="font-semibold">Location:</span> {event.place}
-            </p>
+            <div className="flex justify-center items-center gap-2 text-sm sm:text-base">
+              <MapPin className="w-4 h-4 text-blue-500" />
+              <span className="font-semibold">Location:</span>
+              <span>{event.place}</span>
+            </div>
           )}
           {event.time && (
-            <p>
+            <p className="flex justify-center items-center gap-2">
+              <Clock className="w-4 h-4 text-orange-500" />
               <span className="font-semibold">Time:</span> {event.time}
             </p>
           )}
@@ -345,7 +349,7 @@ function ManualReg() {
                       />
                       <div>
                         <div className="font-medium">{role.roleName}</div>
-                        <div className="text-sm font-bold text-green-600">₹{role.rolePrice}</div>
+                        <div className="text-sm font-bold text-green-600">₹{(role.rolePrice).toLocaleString("en-IN")}</div>
                       </div>
                     </div>
 

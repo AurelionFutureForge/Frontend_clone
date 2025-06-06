@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react"
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
@@ -93,17 +95,23 @@ function AdminLogin() {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <label className="block text-gray-700 font-medium">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
+              className="w-full p-3 pr-10 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              disabled={loading}
               placeholder="Enter your password"
-              className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-[42px] text-gray-600"
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
           </div>
 
           {/* Submit Button */}
@@ -117,12 +125,12 @@ function AdminLogin() {
           </button>
         </form>
         {role === 'admin' && (
-        <p
-          className="text-sm text-blue-600 mt-2 cursor-pointer hover:underline text-right"
-          onClick={() => navigate('/reset-password')}
-        >
-          Forgot password?
-        </p>
+          <p
+            className="text-sm text-blue-600 mt-2 cursor-pointer hover:underline text-right"
+            onClick={() => navigate('/reset-password')}
+          >
+            Forgot password?
+          </p>
         )}
 
         <p className="text-gray-600 text-center mt-4 text-sm">
