@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from "react-hot-toast";
 import { CalendarDays, MapPin, Clock3, Building2, PencilLine, PlusCircle, Menu, X } from 'lucide-react'
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import CreatableSelect from 'react-select/creatable';
 
 export default function EventCreation() {
   const [events, setEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [isFreeRole, setIsFreeRole] = useState(false)
   const [eventDetails, setEventDetails] = useState({
     companyName: '',
     eventName: '',
@@ -27,6 +29,7 @@ export default function EventCreation() {
   const [rolePrice, setRolePrice] = useState('');
   const [roleMaxReg, setRoleMaxReg] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedPrivileges, setSelectedPrivileges] = useState([]);
 
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
@@ -67,10 +70,20 @@ export default function EventCreation() {
     setEventDetails({ ...eventDetails, poster: e.target.files[0] });
   };
 
-  const handleAddRole = () => {
-    if (newRole.trim() && roleDescription.trim() && privilege.trim() && rolePrice && roleMaxReg) {
-      const cleanedPrivilege = privilege.split(',').map(p => p.trim()).filter(p => p.length > 0).join(',');
+  const handlePrivilegeChange = (selected) => {
+    setSelectedPrivileges(selected || []);
+    const commaSeparated = (selected || []).map(p => p.value).join(',');
+    setPrivilege(commaSeparated);
+  };
 
+  const handleAddRole = () => {
+    if (
+      newRole.trim() &&
+      roleDescription.trim() &&
+      privilege.trim() &&
+      rolePrice &&
+      roleMaxReg
+    ) {
       setEventDetails((prevDetails) => ({
         ...prevDetails,
         eventRoles: [
@@ -78,22 +91,25 @@ export default function EventCreation() {
           {
             roleName: newRole.trim(),
             roleDescription: roleDescription.trim(),
-            privileges: [cleanedPrivilege],
+            privileges: [privilege], 
             price: Number(rolePrice),
-            maxRegistrations: Number(roleMaxReg)
-          }
-        ]
+            maxRegistrations: Number(roleMaxReg),
+          },
+        ],
       }));
 
+      // Reset fields
       setNewRole('');
       setRoleDescription('');
       setPrivilege('');
+      setSelectedPrivileges([]);
       setRolePrice('');
       setRoleMaxReg('');
     } else {
       toast.error('Please fill all role fields, including price and max registrations');
     }
   };
+
 
   const handleDeleteRole = (index) => {
     setEventDetails((prevDetails) => ({
@@ -208,7 +224,7 @@ export default function EventCreation() {
           <NavLink
             to="/create-event"
             className={({ isActive }) =>
-              `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "hover:bg-red-600 text-black" : "hover:bg-red-600"
+              `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "bg-red-600 text-white" : "hover:bg-red-600 active:bg-red-600"
               }`
             }
           >
@@ -334,35 +350,65 @@ export default function EventCreation() {
             />
 
             <div className="mb-6">
-              <h5 className="text-lg font-semibold mb-2">Add New Role</h5>
+              <h5 className="text-lg font-semibold mb-2">Add New Role ( TICKET )</h5>
               <input
                 type="text"
-                placeholder="New Role Name"
+                placeholder="New Role or Tickte Name"
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
                 className="w-full p-3 mb-2 border rounded-lg shadow-sm"
               />
               <input
                 type="text"
-                placeholder="Role Description"
+                placeholder="Role or Ticket Description"
                 value={roleDescription}
                 onChange={(e) => setRoleDescription(e.target.value)}
                 className="w-full p-3 mb-2 border rounded-lg shadow-sm"
               />
-              <input
-                type="text"
-                placeholder="Enter privileges (comma-separated)"
-                value={privilege}
-                onChange={(e) => setPrivilege(e.target.value)}
-                className="w-full p-3 mb-2 border rounded-lg shadow-sm"
+
+              <CreatableSelect
+                isMulti
+                value={selectedPrivileges}
+                onChange={handlePrivilegeChange}
+                className="mb-2"
+                classNamePrefix="select"
+                placeholder="Enter privileges"
               />
-              <input
-                type="number"
-                placeholder="Role Price"
-                value={rolePrice}
-                onChange={(e) => setRolePrice(e.target.value)}
-                className="w-full p-3 mb-2 border rounded-lg shadow-sm"
-              />
+
+              <div className="relative w-full mb-2">
+                <input
+                  type={isFreeRole ? "text" : "number"}
+                  placeholder="Role or Ticket Price"
+                  value={isFreeRole ? "Free" : rolePrice}
+                  disabled={isFreeRole}
+                  onChange={(e) => setRolePrice(e.target.value)}
+                  className={`w-full p-3 pl-10 border rounded-lg shadow-sm ${isFreeRole ? 'bg-gray-100' : ''
+                    }`}
+                />
+                {!isFreeRole && (
+                  <span className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500 text-lg">
+                    ₹
+                  </span>
+                )}
+              </div>
+
+              <label className="flex items-center gap-2 mb-2">
+                <input
+                  type="checkbox"
+                  checked={isFreeRole}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setIsFreeRole(checked);
+                    if (checked) {
+                      setRolePrice("0");
+                    } else {
+                      setRolePrice("");
+                    }
+                  }}
+                />
+                <span className="text-sm font-medium">Make this role free</span>
+              </label>
+
               <input
                 type="number"
                 placeholder="Max Registrations"
@@ -380,7 +426,7 @@ export default function EventCreation() {
             </div>
 
             <div className="mb-6">
-              <h5 className="text-lg font-semibold mb-2">Selected Roles</h5>
+              <h5 className="text-lg font-semibold mb-2">Selected Roles or Tickets</h5>
               {eventDetails.eventRoles.map((role, index) => (
                 <div key={index} className="flex justify-between items-center mb-2 p-2 border rounded-lg bg-gray-100">
                   <div>

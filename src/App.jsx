@@ -22,7 +22,7 @@ import Login from './pages/Login';
 import PaymentSuccess from './pages/PaymentSuccess';
 import ResetPasswordRequest from './pages/ResetPasswordRequest';
 import ResetPassword from './pages/ResetPassword'
-
+import FreeSuccess from './pages/FreeSuccess';
 
 const App = () => {
   return (
@@ -31,6 +31,7 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/:EventName/register/:eventID' element={<RegistrationForm />} />
         <Route path="/success/:eventID" element={<SuccessPage />} />
+        <Route path='/free-success/:eventID/:email' element={<FreeSuccess />} />
         <Route path="/admin/scanner" element={<ProtectedPrivilege> <AdminScanner /> </ProtectedPrivilege>} />
         <Route path="/admin/register" element={<AdminRegister />} />
         <Route path='/admin/login' element={<AdminLogin />} />

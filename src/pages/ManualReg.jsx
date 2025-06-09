@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import logo from '../assets/stagyn_black.png'
-import { ShieldCheck,MapPin, Calendar, Clock } from 'lucide-react'
+import { ShieldCheck, MapPin, Calendar, Clock } from 'lucide-react'
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function extractContact(registrationData = {}) {
   const contactField = Object.keys(registrationData).find((key) => {
@@ -28,6 +29,8 @@ function ManualReg() {
   const [paymentSuccess, setPaymentSuccess] = useState(false); // Track payment
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const eventID = localStorage.getItem("selectedEvent");
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -83,7 +86,7 @@ function ManualReg() {
       toast.error("Please enter a valid 10-digit contact number.");
       return;
     }
-
+    setIsLoading(true);
     try {
       const selectedRoleData = event.eventRoles.find(role => role.roleName === formData.role);
       const amount = selectedRoleData.rolePrice;
@@ -118,8 +121,11 @@ function ManualReg() {
         toast.error("Failed to get PhonePe payment URL.");
       }
     } catch (err) {
+      setIsLoading(false);
       toast.error("Fill all the required fields or Payment initiation failed");
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -199,6 +205,39 @@ function ManualReg() {
   const selectedRole = event?.eventRoles?.find(
     (role) => role.roleName === formData.role
   );
+
+    const handleFreeRegistration = async () => {
+      setIsLoading(true);
+    try {
+      console.log(formData);
+      console.log(eventID);
+      const response = await axios.post(
+        `${BASE_URL}/users/freeRegister`, 
+        {
+          formData,
+          eventID,
+        }
+      );
+      const email = formData.EMAIL;
+      if (response.status === 201 || response.status === 200) {
+        toast.success(response.data.message || "Registered successfully!");
+        setPaymentSuccess(true);
+        navigate(`/free-success/${eventID}/${encodeURIComponent(email)}`);
+      } else {
+        toast.error(response.data.message || "Registration failed.");
+      }
+    } catch (error) {
+      console.error("Free registration error:", error);
+      const msg =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong during registration.";
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 p-6  flex flex-col items-center justify-between">
@@ -349,7 +388,7 @@ function ManualReg() {
                       />
                       <div>
                         <div className="font-medium">{role.roleName}</div>
-                        <div className="text-sm font-bold text-green-600">₹{(role.rolePrice).toLocaleString("en-IN")}</div>
+                        <div className="text-sm font-bold text-green-600">{role.rolePrice === 0 ? "FREE" : `₹${role.rolePrice.toLocaleString("en-IN")}`}</div>
                       </div>
                     </div>
 
@@ -378,6 +417,20 @@ function ManualReg() {
           {/* Payment Button */}
           {formData.role && !paymentSuccess && selectedRole && (() => {
             const rolePrice = parseFloat(selectedRole.rolePrice) || 0;
+
+            if (rolePrice === 0) {
+              return (
+                <button
+                  type="button"
+                  className="mt-4 px-4 py-2 rounded-xl w-full bg-red-600 text-white hover:bg-red-700"
+                  onClick={handleFreeRegistration}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Registering...' : 'Register'}
+                </button>
+              );
+            }
+
             const platformFee = (rolePrice * 2.5) / 100;
             const totalAmount = rolePrice + platformFee;
 
@@ -403,8 +456,9 @@ function ManualReg() {
                   type="button"
                   className="mt-4 px-4 py-2 rounded-xl w-full bg-red-600 text-white hover:bg-red-700"
                   onClick={handlePayment}
+                  disabled={isLoading}
                 >
-                  Pay ₹{totalAmount.toFixed(2)}
+                 {isLoading ? 'Processing...' : `Pay ₹${totalAmount.toFixed(2)}`}
                 </button>
                 <div className="flex items-center justify-center space-x-2 mt-5">
                   <ShieldCheck className="w-7 h-7 text-green-600" />
@@ -413,6 +467,7 @@ function ManualReg() {
               </>
             );
           })()}
+
 
           <div className="mt-8 flex items-center justify-center gap-2">
             <span className="text-gray-600 text-sm mb-2">Powered by</span>

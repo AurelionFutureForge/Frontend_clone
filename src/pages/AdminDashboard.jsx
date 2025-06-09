@@ -120,7 +120,7 @@ function AdminDashboard() {
         : "No privileges assigned";
 
       // You can customize this based on actual field names
-      const paymentStatus = user.paymentStatus || "Not Available";
+      const paymentStatus = user.paymentStatus || "FREE REGISTRATION";
       const registeredDate = user.createdAt
         ? new Date(user.createdAt).toLocaleDateString()
         : "N/A";
@@ -263,7 +263,7 @@ function AdminDashboard() {
           }`}
       >
         <div className="text-2xl font-bold tracking-wide flex justify-between items-center">
-          Stagyn.io
+          <NavLink to='/'>Stagyn.io</NavLink>
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden p-1"
@@ -347,7 +347,7 @@ function AdminDashboard() {
               );
             })}
           </div>
-
+          
           {/* Actions */}
           <div className="flex flex-col lg:flex-row lg:justify-between gap-3 mb-4">
             <div className="flex flex-col lg:flex-row gap-2 w-full lg:w-auto">
@@ -492,7 +492,7 @@ function AdminDashboard() {
                         )}
                       </td>
 
-                      <td className="px-4 py-3">{user.paymentStatus || "Not Paid"}</td>
+                      <td className="px-4 py-3">{user.paymentStatus || "FREE REGISTRATION"}</td>
                       <td className="px-4 py-3">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}</td>
                       <td className="px-4 py-3">
                         {user.createdAt

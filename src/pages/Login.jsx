@@ -8,7 +8,7 @@ function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("admin");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -47,10 +47,7 @@ function AdminLogin() {
 
         toast.success("Login successful!");
         navigate("/privilege/dashboard");
-      } else {
-        toast.error("please select a role");
-      }
-
+      } 
     } catch (error) {
       // Handle invalid credentials
       toast.error("Invalid Credentials!");
@@ -74,7 +71,6 @@ function AdminLogin() {
               className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
               disabled={loading}
             >
-              <option value="please select">Please Select</option>
               <option value="admin">Admin</option>
               <option value="privilege">Privilege</option>
             </select>

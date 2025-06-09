@@ -84,7 +84,7 @@ function Home() {
           {/* Logo + Desktop Nav */}
           <div className="flex items-center space-x-8 ml-4">
             <Link to="/">
-              <img className="w-38 h-10 whitespace-nowrap text-black" src={logo} />
+              <img className="w-32 h-8 whitespace-nowrap text-black" src={logo} />
             </Link>
 
             {/* Desktop Menu */}

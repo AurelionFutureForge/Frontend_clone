@@ -30,6 +30,8 @@ function RegistrationForm() {
   const [loading, setLoading] = useState(true);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [formVisible, setFormVisible] = useState(true);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const { eventID } = useParams();
@@ -183,9 +185,8 @@ function RegistrationForm() {
       toast.error("Please enter a valid 10-digit contact number.");
       return;
     }
-
+    setIsLoading(true);
     try {
-
       const checkRes = await axios.post(`${BASE_URL}/users/check-email`, {
         email: formData.EMAIL || formData.email,
         eventId: eventID,
@@ -220,6 +221,39 @@ function RegistrationForm() {
     } catch (err) {
       toast.error("Fill all the required fields or Payment initiation failed");
       console.error(err);
+    } finally{
+      setIsLoading(false);
+    }
+  };
+
+  const handleFreeRegistration = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/users/freeRegister`, 
+        {
+          formData,
+          eventID,
+        }
+      );
+      const email = formData.EMAIL;
+      if (response.status === 201 || response.status === 200) {
+        toast.success(response.data.message || "Registered successfully!");
+        setPaymentSuccess(true);
+        navigate(`/free-success/${eventID}/${encodeURIComponent(email)}`);
+      } else {
+        toast.error(response.data.message || "Registration failed.");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Free registration error:", error);
+      const msg =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong during registration.";
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -381,7 +415,8 @@ function RegistrationForm() {
                         />
                         <span className="font-medium">{option}</span>
                         <span className="text-sm text-blue-600 font-semibold ml-auto">
-                          ₹{price.toLocaleString("en-IN")}<span className="text-red-800">*</span>
+                          {price === 0 ? "Free" : `₹${price.toLocaleString("en-IN")}`}
+                          <span className="text-red-800">*</span>
                         </span>
                       </div>
                       {matchingRole?.roleDescription && (
@@ -413,34 +448,52 @@ function RegistrationForm() {
                   <div className="mb-4 text-black font-medium space-y-1 text-md">
                     <p className="flex justify-between">
                       <span>Amount:</span>
-                      <span>₹{rolePrice.toFixed(2)}</span>
+                      <span>{rolePrice === 0 ? "Free" : `₹${rolePrice.toFixed(2)}`}</span>
                     </p>
-                    <p className="flex justify-between text-[12px]">
-                      <span>Platform Fee (2.5%):</span>
-                      <span>₹{platformFee.toFixed(2)}</span>
-                    </p>
-                    <hr className="my-1 border-blue-300" />
-                    <p className="flex justify-between font-semibold text-xl">
-                      <span>Total:</span>
-                      <span>₹{totalAmount.toFixed(2)}</span>
-                    </p>
+                    {rolePrice !== 0 && (
+                      <>
+                        <p className="flex justify-between text-[12px]">
+                          <span>Platform Fee (2.5%):</span>
+                          <span>₹{platformFee.toFixed(2)}</span>
+                        </p>
+                        <hr className="my-1 border-blue-300" />
+                        <p className="flex justify-between font-semibold text-xl">
+                          <span>Total:</span>
+                          <span>₹{totalAmount.toFixed(2)}</span>
+                        </p>
+                      </>
+                    )}
 
-                    <button
-                      type="button"
-                      className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
-                      onClick={handlePayment}
-                    >
-                      Pay ₹{totalAmount.toFixed(2)}
-                    </button>
+                    {rolePrice === 0 ? (
+                      <button
+                        type="button"
+                        className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
+                        onClick={handleFreeRegistration}
+                         disabled={isLoading}
+                      >
+                        {isLoading ? 'Registering...' : 'Register'}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
+                        onClick={handlePayment}
+                         disabled={isLoading}
+                      >
+                        {isLoading ? 'Processing...' : `Pay ₹${totalAmount.toFixed(2)}`}
+                      </button>
+                    )}
+
                     <div className="flex items-center justify-center space-x-2 mt-5">
-                      <ShieldCheck className="w-7 h-7 text-green-600" />
-                      <p className="font-normal">Safe & Secure Payment</p>
+                      <ShieldCheck className="w-6 h-6 text-green-600" />
+                      <p className="text-[15px]">Safe & Secure Payment</p>
                     </div>
                   </div>
                 );
               })()}
             </>
           )}
+
           <div className="mt-8 flex items-center justify-center gap-2">
             <span className="text-gray-600 text-sm mb-2">Powered by</span>
             <Link to="/">

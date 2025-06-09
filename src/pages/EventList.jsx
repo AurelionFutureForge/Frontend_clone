@@ -79,7 +79,7 @@ function EventList() {
             Create Event
           </NavLink>
           <NavLink
-            to="/create-event"
+            to="/event-list"
             className={({ isActive }) =>
               `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "bg-red-600 text-white" : "hover:bg-red-600 active:bg-red-600"
               }`

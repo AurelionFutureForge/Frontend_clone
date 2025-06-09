@@ -34,7 +34,7 @@ export default function EditEvent() {
       try {
         const res = await axios.get(`${BASE_URL}/events/edit/${eventId}`);
         const event = res.data;
-        console.log("event :",event);
+        console.log("event :", event);
 
         const rolesWithPrivilegesString = event.eventRoles.map(role => ({
           ...role,
@@ -178,7 +178,7 @@ export default function EditEvent() {
   };
 
   const sDate = eventDetails.startDate ? new Date(eventDetails.startDate).toISOString().split("T")[0] : "";
-  const eDate = eventDetails.endDate ? new Date(eventDetails.endDate).toISOString().split("T")[0] : ""; 
+  const eDate = eventDetails.endDate ? new Date(eventDetails.endDate).toISOString().split("T")[0] : "";
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-black to-gray-800 p-6">
@@ -242,9 +242,18 @@ export default function EditEvent() {
             className="w-full p-2 mb-2 border rounded"
             value={privileges} onChange={(e) => setPrivileges(e.target.value)} />
 
-          <input type="number" placeholder="Role Price"
-            className="w-full p-2 mb-2 border rounded"
-            value={rolePrice} onChange={(e) => setRolePrice(e.target.value)} />
+          <div className="relative w-full mb-2">
+            <input
+              type="number"
+              placeholder="Enter price"
+              value={rolePrice}
+              onChange={(e) => setRolePrice(e.target.value)}
+              className="w-full p-3 pl-10 border rounded-lg shadow-sm"
+            />
+            <span className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500 text-lg">
+              ₹
+            </span>
+          </div>
 
           <input type="number" placeholder="Max Registrations"
             className="w-full p-2 mb-2 border rounded"
