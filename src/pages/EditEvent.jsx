@@ -245,14 +245,14 @@ export default function EditEvent() {
 
         <textarea
           name="event-description"
-          placeholder="Write about the event..! (Max 250 words)"
+          placeholder="Write about the event..! (Max 100 words)"
           className="w-full p-3 mb-4 border rounded-lg shadow-sm"
           onChange={handleDescriptionChange}
           value={eventDetails.eventDescription}
           rows={5}
         />
         <p className="text-sm text-gray-500 text-right">
-          {eventDetails.eventDescription.trim().split(/\s+/).filter(Boolean).length} / 100 words
+          {(eventDetails.eventDescription || '').trim().split(/\s+/).filter(Boolean).length} / 100 words
         </p>
 
         <div className="mb-6">

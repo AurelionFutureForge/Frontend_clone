@@ -507,7 +507,7 @@ export default function EventCreation() {
 
             <textarea
               name="event-description"
-              placeholder="Write about the event..! (Max 150 words)"
+              placeholder="Write about the event..! (Max 100 words)"
               className="w-full p-3 mb-4 border rounded-lg shadow-sm" 
               onChange={handleDescriptionChange}
               value={eventDetails.eventDescription}
