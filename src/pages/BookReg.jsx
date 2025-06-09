@@ -35,13 +35,13 @@ const BookReg = () => {
     <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 flex items-center justify-center p-6">
       <div
         className="
-      max-w-3xl w-full p-8 bg-white rounded-2xl shadow-xl border border-gray-200
+      max-w-3xl w-full p-8 bg-gradient-to-r from-gray-700 to-gray-800 rounded-2xl shadow-xl border border-gray-200
       transform transition-transform duration-300 ease-in-out
       hover:scale-[1.03] hover:shadow-2xl
     "
       >
         {/* Event Title */}
-        <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-6">{eventDetails.eventName}</h1>
+        <h1 className="text-4xl font-extrabold text-center text-white mb-6">{eventDetails.eventName}</h1>
 
         <div className="mb-8">
           <div className="prose max-w-none text-gray-800 text-lg leading-relaxed">
@@ -49,22 +49,16 @@ const BookReg = () => {
             <img
               src={eventDetails.companyPoster}
               alt="Company Poster"
-              className="w-full mb-4 rounded-lg shadow-md object-cover max-h-[300px] md:float-left md:mr-6 md:w-1/2"
+              className="w-full h-auto mb-4 rounded-lg object-contain max-h-[300px] md:float-left md:mr-6 md:w-1/2"
             />
 
             {/* Description */}
-            <p className="whitespace-pre-line">
+            <p className="whitespace-pre-line text-gray-400">
               {eventDetails.eventDescription}
             </p>
           </div>
         </div>
 
-        {/* Roles Count Display */}
-        {eventDetails.eventRoles && (
-          <div className="mb-8 p-5 bg-blue-50 border border-blue-300 rounded-lg text-gray-800 text-center font-semibold text-lg shadow-sm">
-            Total Roles Available: <span className="text-gray-700">{eventDetails.eventRoles.length}</span>
-          </div>
-        )}
 
         {/* Book Ticket Button */}
         <button
