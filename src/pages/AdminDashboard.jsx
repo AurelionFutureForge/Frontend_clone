@@ -244,7 +244,7 @@ function AdminDashboard() {
 
   const copyRegForm = () => {
     const formattedEventName = EventName.replace(/\s+/g, '-');
-    const formLink = `https://events.aurelionfutureforge.com/${formattedEventName}/register/${selectedEvent}`;
+    const formLink = `https://events.aurelionfutureforge.com/${formattedEventName}/book-register/${selectedEvent}`;
     if (formLink) {
       navigator.clipboard.writeText(formLink);
       toast.success("Link copied to clipboard!");

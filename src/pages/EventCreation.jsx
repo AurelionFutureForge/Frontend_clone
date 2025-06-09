@@ -18,7 +18,8 @@ export default function EventCreation() {
     endDate: '',
     time: '',
     eventRoles: [],
-    poster: null
+    poster: null,
+    eventDescription: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -91,7 +92,7 @@ export default function EventCreation() {
           {
             roleName: newRole.trim(),
             roleDescription: roleDescription.trim(),
-            privileges: [privilege], 
+            privileges: [privilege],
             price: Number(rolePrice),
             maxRegistrations: Number(roleMaxReg),
           },
@@ -159,6 +160,7 @@ export default function EventCreation() {
       if (eventDetails.poster) {
         formData.append("companyPoster", eventDetails.poster);
       }
+      formData.append("eventDescription", eventDetails.eventDescription);
 
       const response = await axios.post(`${BASE_URL}/events/create-event`, formData, {
         headers: {
@@ -178,7 +180,8 @@ export default function EventCreation() {
           endDate: '',
           time: '',
           eventRoles: [],
-          poster: null
+          poster: null,
+          eventDescription: ''
         });
       }
     } catch (error) {
@@ -202,6 +205,18 @@ export default function EventCreation() {
     localStorage.removeItem("admin_token");
     localStorage.removeItem("adminCompanyName"); // or any auth info
     window.location.href = "/"; // Redirect to home or login page
+  };
+
+  const handleDescriptionChange = (e) => {
+    const value = e.target.value;
+    const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
+
+    if (wordCount <= 100) {
+      setEventDetails(prev => ({
+        ...prev,
+        eventDescription: value,
+      }));
+    }
   };
 
   return (
@@ -489,6 +504,18 @@ export default function EventCreation() {
                 className="w-full p-3 mb-4 border rounded-lg shadow-sm"
               />
             </div>
+
+            <textarea
+              name="event-description"
+              placeholder="Write about the event..! (Max 150 words)"
+              className="w-full p-3 mb-4 border rounded-lg shadow-sm" 
+              onChange={handleDescriptionChange}
+              value={eventDetails.eventDescription}
+              rows={5}
+            />
+            <p className="text-sm text-gray-500 text-right">
+              {eventDetails.eventDescription.trim().split(/\s+/).filter(Boolean).length} / 100 words
+            </p>
 
             {error && <p className="text-red-600">{error}</p>}
             <br />

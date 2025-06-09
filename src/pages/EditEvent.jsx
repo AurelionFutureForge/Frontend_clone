@@ -15,6 +15,7 @@ export default function EditEvent() {
     endDate: '',
     time: '',
     eventRoles: [],
+    eventDescription: ''
   });
 
   const [posterFile, setPosterFile] = useState(null);
@@ -49,6 +50,7 @@ export default function EditEvent() {
           endDate: event.endDate,
           time: event.time,
           eventRoles: rolesWithPrivilegesString,
+          eventDescription: event.eventDescription
         });
       } catch (err) {
         console.error(err);
@@ -162,6 +164,7 @@ export default function EditEvent() {
       if (posterFile) {
         formData.append("poster", posterFile);
       }
+      formData.append("eventDescription", eventDetails.eventDescription)
 
       const res = await axios.put(`${BASE_URL}/events/${eventId}`, formData);
 
@@ -174,6 +177,18 @@ export default function EditEvent() {
       setError(err.response?.data?.msg || "Failed to update event");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    const value = e.target.value;
+    const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
+
+    if (wordCount <= 100) {
+      setEventDetails(prev => ({
+        ...prev,
+        eventDescription: value,
+      }));
     }
   };
 
@@ -227,6 +242,18 @@ export default function EditEvent() {
           className="w-full mb-4 p-2 border rounded"
           onChange={(e) => setPosterFile(e.target.files[0])}
         />
+
+        <textarea
+          name="event-description"
+          placeholder="Write about the event..! (Max 250 words)"
+          className="w-full p-3 mb-4 border rounded-lg shadow-sm"
+          onChange={handleDescriptionChange}
+          value={eventDetails.eventDescription}
+          rows={5}
+        />
+        <p className="text-sm text-gray-500 text-right">
+          {eventDetails.eventDescription.trim().split(/\s+/).filter(Boolean).length} / 100 words
+        </p>
 
         <div className="mb-6">
           <h5 className="font-semibold mb-2">Add/Edit Roles & Privileges</h5>

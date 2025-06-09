@@ -23,6 +23,7 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import ResetPasswordRequest from './pages/ResetPasswordRequest';
 import ResetPassword from './pages/ResetPassword'
 import FreeSuccess from './pages/FreeSuccess';
+import BookReg from './pages/BookReg';
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/:EventName/register/:eventID' element={<RegistrationForm />} />
+        <Route path='/:EventName/book-register/:eventID' element={<BookReg />} />
         <Route path="/success/:eventID" element={<SuccessPage />} />
         <Route path='/free-success/:eventID/:email' element={<FreeSuccess />} />
         <Route path="/admin/scanner" element={<ProtectedPrivilege> <AdminScanner /> </ProtectedPrivilege>} />
