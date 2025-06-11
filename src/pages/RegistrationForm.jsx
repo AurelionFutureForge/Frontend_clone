@@ -415,7 +415,7 @@ function RegistrationForm() {
                         />
                         <span className="font-medium">{option}</span>
                         <span className="text-sm text-blue-600 font-semibold ml-auto">
-                          {price === 0 ? "Free" : `₹${price.toLocaleString("en-IN")}`}
+                          {price === 0 ? "FREE" : `₹${price.toLocaleString("en-IN")}`}
                           <span className="text-red-800">*</span>
                         </span>
                       </div>

@@ -35,6 +35,7 @@ export default function EventCreation() {
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   const loggedInEmail = localStorage.getItem('adminEmail');
+  const adminCompany = localStorage.getItem('adminCompanyName');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -49,6 +50,9 @@ export default function EventCreation() {
         toast.error('Company name not found. Please login again.');
         navigate('/event-login');
         return;
+      }
+      if (companyName) {
+        setEventDetails(prev => ({ ...prev, companyName: companyName }));
       }
 
       try {
@@ -351,10 +355,12 @@ export default function EventCreation() {
               type="text"
               name="companyName"
               placeholder="Company Name"
-              className="w-full p-3 mb-4 border rounded-lg shadow-sm"
+              className="w-full p-3 mb-4 border rounded-lg shadow-sm bg-gray-200 cursor-not-allowed"
               onChange={handleChange}
               value={eventDetails.companyName}
+              disabled
             />
+
             <input
               type="text"
               name="eventName"
@@ -368,14 +374,14 @@ export default function EventCreation() {
               <h5 className="text-lg font-semibold mb-2">Add New Role ( TICKET )</h5>
               <input
                 type="text"
-                placeholder="New Role or Tickte Name"
+                placeholder="New Ticket Name"
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
                 className="w-full p-3 mb-2 border rounded-lg shadow-sm"
               />
               <input
                 type="text"
-                placeholder="Role or Ticket Description"
+                placeholder="Ticket Description"
                 value={roleDescription}
                 onChange={(e) => setRoleDescription(e.target.value)}
                 className="w-full p-3 mb-2 border rounded-lg shadow-sm"
@@ -393,11 +399,11 @@ export default function EventCreation() {
               <div className="relative w-full mb-2">
                 <input
                   type={isFreeRole ? "text" : "number"}
-                  placeholder="Role or Ticket Price"
+                  placeholder="Ticket Price"
                   value={isFreeRole ? "Free" : rolePrice}
                   disabled={isFreeRole}
                   onChange={(e) => setRolePrice(e.target.value)}
-                  className={`w-full p-3 pl-10 border rounded-lg shadow-sm ${isFreeRole ? 'bg-gray-100' : ''
+                  className={`w-full p-3 pl-10 border rounded-lg shadow-sm ${isFreeRole ? 'w-full p-3 mb-4 border rounded-lg shadow-sm bg-gray-200 cursor-not-allowed' : ''
                     }`}
                 />
                 {!isFreeRole && (
@@ -421,7 +427,7 @@ export default function EventCreation() {
                     }
                   }}
                 />
-                <span className="text-sm font-medium">Make this role free</span>
+                <span className="text-sm font-medium">Make this Ticket free</span>
               </label>
 
               <input
@@ -436,12 +442,12 @@ export default function EventCreation() {
                 onClick={handleAddRole}
                 className="w-full py-2 mt-2 bg-red-600 text-white font-semibold rounded-4xl shadow hover:bg-red-700"
               >
-                Add Role
+                Add Ticket
               </button>
             </div>
 
             <div className="mb-6">
-              <h5 className="text-lg font-semibold mb-2">Selected Roles or Tickets</h5>
+              <h5 className="text-lg font-semibold mb-2">Selected Tickets</h5>
               {eventDetails.eventRoles.map((role, index) => (
                 <div key={index} className="flex justify-between items-center mb-2 p-2 border rounded-lg bg-gray-100">
                   <div>
@@ -508,7 +514,7 @@ export default function EventCreation() {
             <textarea
               name="event-description"
               placeholder="Write about the event..! (Max 100 words)"
-              className="w-full p-3 mb-4 border rounded-lg shadow-sm" 
+              className="w-full p-3 mb-4 border rounded-lg shadow-sm"
               onChange={handleDescriptionChange}
               value={eventDetails.eventDescription}
               rows={5}

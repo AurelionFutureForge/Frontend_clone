@@ -273,6 +273,15 @@ function AdminDashboard() {
         </div>
         <nav className="flex flex-col gap-4 text-sm">
           <NavLink
+            to= {`/admin/dashboard/${selectedEvent}/${EventName}`}
+            className={({ isActive }) =>
+              `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "bg-red-600 text-white" : "hover:bg-red-600 active:bg-red-600"
+              }`
+            }
+          >
+            Admin
+          </NavLink>
+          <NavLink
             to="/create-event"
             className={({ isActive }) =>
               `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "bg-red-600 text-white" : "hover:bg-red-600"
@@ -347,7 +356,7 @@ function AdminDashboard() {
               );
             })}
           </div>
-          
+
           {/* Actions */}
           <div className="flex flex-col lg:flex-row lg:justify-between gap-3 mb-4">
             <div className="flex flex-col lg:flex-row gap-2 w-full lg:w-auto">

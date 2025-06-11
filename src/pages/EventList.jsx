@@ -60,7 +60,7 @@ function EventList() {
           }`}
       >
         <div className="text-2xl font-bold tracking-wide flex justify-between items-center">
-         <NavLink to='/'><p>Stagyn.io</p></NavLink> 
+          <NavLink to='/'><p>Stagyn.io</p></NavLink>
           <button
             onClick={() => setSidebarOpen(false)}
             className="sm:hidden p-1"
