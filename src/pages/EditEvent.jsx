@@ -103,7 +103,7 @@ export default function EditEvent() {
       setRolePrice('');
       setMaxRegistrations('');
     } else {
-      toast.error("All fields for role are required.");
+      toast.error("All fields for ticket are required.");
     }
   };
 
@@ -131,7 +131,7 @@ export default function EditEvent() {
   const validateForm = () => {
     const { companyName, eventName, place, startDate, eventRoles, time } = eventDetails;
     if (!companyName || !eventName || !place || !startDate || eventRoles.length === 0 || !time) {
-      setError("All fields and at least one role are required.");
+      setError("All fields and at least one ticket is required.");
       return false;
     }
     setError('');
@@ -256,12 +256,12 @@ export default function EditEvent() {
         </p>
 
         <div className="mb-6">
-          <h5 className="font-semibold mb-2">Add/Edit Roles & Privileges</h5>
-          <input type="text" placeholder="Role Name"
+          <h5 className="font-semibold mb-2">Add/Edit Tickets & Privileges</h5>
+          <input type="text" placeholder="Ticket Name"
             className="w-full p-2 mb-2 border rounded"
             value={newRole} onChange={(e) => setNewRole(e.target.value)} />
 
-          <input type="text" placeholder="Role Description"
+          <input type="text" placeholder="Ticket Description"
             className="w-full p-2 mb-2 border rounded"
             value={roleDescription} onChange={(e) => setRoleDescription(e.target.value)} />
 
@@ -282,14 +282,14 @@ export default function EditEvent() {
             </span>
           </div>
 
-          <input type="number" placeholder="Max Registrations"
+          <input type="number" placeholder="Maximum registrations ( total seats available) "
             className="w-full p-2 mb-2 border rounded"
             value={maxRegistrations} onChange={(e) => setMaxRegistrations(e.target.value)} />
 
           <button
             onClick={handleAddRole}
             className="w-full py-2 bg-red-600 text-white rounded-4xl hover:bg-red-700"
-          >{editIndex !== null ? 'Update Role' : 'Add Role'}</button>
+          >{editIndex !== null ? 'Update Ticket' : 'Add Ticket'}</button>
 
           <div className="mt-4 space-y-2">
             {eventDetails.eventRoles.map((role, index) => (

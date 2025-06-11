@@ -9,6 +9,8 @@ function AdminRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [location, setLocation] = useState("");
+  const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +23,7 @@ function AdminRegister() {
 
     try {
       // Register admin and get token and company details
-      const response = await axios.post(`${BASE_URL}/admin/register`, { email, password, companyName });
+      const response = await axios.post(`${BASE_URL}/admin/register`, { email, password, companyName, location, category });
 
       // Store token and company details in localStorage (log the user in)
       localStorage.setItem("admin_token", response.data.token);
@@ -88,6 +90,35 @@ function AdminRegister() {
               onChange={(e) => setCompanyName(e.target.value)}
               required
               placeholder="Enter your company name"
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium">Using stagyn for ? </label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+            >
+              <option value="">Select a category</option>
+              <option value="Startup expo/  conference / networking events">Startup expo/  conference / networking events</option>
+              <option value="Corporate events / Training Programs">Corporate events / Training Programs</option>
+              <option value=" Entertainment Events / concerts"> Entertainment Events / concerts</option>
+
+            </select>
+          </div>
+
+
+          <div>
+            <label className="block text-gray-700 font-medium">Location</label>
+            <input
+              type="text"
+              className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+              placeholder="Enter your location"
               disabled={loading}
             />
           </div>

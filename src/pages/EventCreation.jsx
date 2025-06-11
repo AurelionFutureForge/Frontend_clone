@@ -111,7 +111,7 @@ export default function EventCreation() {
       setRolePrice('');
       setRoleMaxReg('');
     } else {
-      toast.error('Please fill all role fields, including price and max registrations');
+      toast.error('Please fill all Ticket fields, including price and max registrations');
     }
   };
 
@@ -371,7 +371,7 @@ export default function EventCreation() {
             />
 
             <div className="mb-6">
-              <h5 className="text-lg font-semibold mb-2">Add New Role ( TICKET )</h5>
+              <h5 className="text-lg font-semibold mb-2">Add New TICKET </h5>
               <input
                 type="text"
                 placeholder="New Ticket Name"
@@ -400,7 +400,7 @@ export default function EventCreation() {
                 <input
                   type={isFreeRole ? "text" : "number"}
                   placeholder="Ticket Price"
-                  value={isFreeRole ? "Free" : rolePrice}
+                  value={isFreeRole ? "FREE" : rolePrice}
                   disabled={isFreeRole}
                   onChange={(e) => setRolePrice(e.target.value)}
                   className={`w-full p-3 pl-10 border rounded-lg shadow-sm ${isFreeRole ? 'w-full p-3 mb-4 border rounded-lg shadow-sm bg-gray-200 cursor-not-allowed' : ''
@@ -432,7 +432,7 @@ export default function EventCreation() {
 
               <input
                 type="number"
-                placeholder="Max Registrations"
+                placeholder="Maximum registrations ( total seats available) "
                 value={roleMaxReg}
                 onChange={(e) => setRoleMaxReg(e.target.value)}
                 className="w-full p-3 mb-2 border rounded-lg shadow-sm"

@@ -32,6 +32,7 @@ function RegistrationForm() {
   const [formVisible, setFormVisible] = useState(true);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [admin, setAdmin] = useState('');
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const { eventID } = useParams();
@@ -56,6 +57,10 @@ function RegistrationForm() {
           `${BASE_URL}/users/${eventID}/role-registrations`
         );
         setRoleRegistrations(regRes.data);
+
+        const companyName = event.companyName;
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        setAdmin(adminRes.data);
 
         setLoading(false);
       } catch (error) {
@@ -197,7 +202,9 @@ function RegistrationForm() {
         return;
       }
 
-      const calculatedAmount = parseFloat((rolePrice * 1.025).toFixed(2));
+      const feePercent = admin?.category === "Entertainment Events / concerts" ? 5 : 2.5;
+      const multiplier = 1 + feePercent / 100;
+      const calculatedAmount = parseFloat((rolePrice * multiplier).toFixed(2));
 
       const updatedFormData = {
         ...formData,
@@ -221,7 +228,7 @@ function RegistrationForm() {
     } catch (err) {
       toast.error("Fill all the required fields or Payment initiation failed");
       console.error(err);
-    } finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -230,7 +237,7 @@ function RegistrationForm() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `${BASE_URL}/users/freeRegister`, 
+        `${BASE_URL}/users/freeRegister`,
         {
           formData,
           eventID,
@@ -441,7 +448,13 @@ function RegistrationForm() {
             <>
               {selectedRole && (() => {
                 const rolePrice = parseFloat(selectedRole.rolePrice);
-                const platformFee = (rolePrice * 2.5) / 100;
+                let platformFee;
+
+                if (admin.category === "Entertainment Events / concerts") {
+                  platformFee = (rolePrice * 5) / 100;
+                } else {
+                  platformFee = (rolePrice * 2.5) / 100;
+                }
                 const totalAmount = rolePrice + platformFee;
 
                 return (
@@ -453,7 +466,11 @@ function RegistrationForm() {
                     {rolePrice !== 0 && (
                       <>
                         <p className="flex justify-between text-[12px]">
-                          <span>Platform Fee (2.5%):</span>
+                          <span>
+                            Platform Fee (
+                            {admin?.category === "Entertainment Events / concerts" ? "5%" : "2.5%"}
+                            ):
+                          </span>
                           <span>₹{platformFee.toFixed(2)}</span>
                         </p>
                         <hr className="my-1 border-blue-300" />
@@ -469,7 +486,7 @@ function RegistrationForm() {
                         type="button"
                         className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
                         onClick={handleFreeRegistration}
-                         disabled={isLoading}
+                        disabled={isLoading}
                       >
                         {isLoading ? 'Registering...' : 'Register'}
                       </button>
@@ -478,7 +495,7 @@ function RegistrationForm() {
                         type="button"
                         className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
                         onClick={handlePayment}
-                         disabled={isLoading}
+                        disabled={isLoading}
                       >
                         {isLoading ? 'Processing...' : `Pay ₹${totalAmount.toFixed(2)}`}
                       </button>
