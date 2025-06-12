@@ -13,66 +13,7 @@ function PaymentSuccess() {
   const [transactionId, setTransactionId] = useState("");
   const [event, setEvent] = useState(null);
   const [admin, setAdmin] = useState(null);
-
-  useEffect(() => {
-    const verifyAndRegister = async () => {
-      const txnId = new URLSearchParams(window.location.search).get("transactionId");
-      const storedFormData = JSON.parse(localStorage.getItem("formData"));
-      const eventID = localStorage.getItem("eventID");
-
-      if (!txnId || !storedFormData || !eventID) {
-        toast.error("Missing payment or registration data.");
-        navigate("/");
-        return;
-      }
-
-      setTransactionId(txnId);
-      localStorage.setItem("transactionID", txnId);
-      setFormData(storedFormData);
-
-      const amount = Number(storedFormData.amount) || 0;
-      const platformFee = amount * 0.025 || 0;
-      const userAmount = amount - platformFee || 0;
-
-      setBreakdown({
-        amount: userAmount,
-        platformFee,
-        total: amount,
-      });
-
-      try {
-        // Check for existing registration
-        const checkEmailRes = await axios.post(`${BASE_URL}/users/check-email`, {
-          email: storedFormData.email || storedFormData.EMAIL,
-          eventId: eventID,
-        });
-
-        if (!checkEmailRes.data.exists) {
-          toast.error("Please complete the payment before registration.");
-          navigate("/");
-          return;
-        }
-
-        // Proceed with registration
-        await axios.post(`${BASE_URL}/users/register`, {
-          formData: storedFormData,
-          eventID,
-          transactionId: txnId,
-        });
-
-        toast.success("Registration successful!");
-        localStorage.removeItem("formData");
-        localStorage.removeItem("eventID");
-        navigate(`/success/${eventID}`);
-      } catch (error) {
-        toast.error("Error during registration.");
-        console.error(error);
-        navigate("/");
-      }
-    };
-
-    verifyAndRegister();
-  }, []);
+  let totalAmount = 0;
 
   const eventID = localStorage.getItem("eventID");
   useEffect(() => {
@@ -127,12 +68,78 @@ function PaymentSuccess() {
     }
     : null;
 
-  let platformFee;
-  if (admin?.category === 'Entertainment Events / concerts') {
-    platformFee = (rolePrice * 5) / 100;
-  } else {
-    platformFee = (rolePrice * 2.5) / 100;
-  }
+
+  let rolePrice = 0;
+  let platformFee = 0;
+
+
+  platformFee = totalAmount - rolePrice;
+  useEffect(() => {
+    const verifyAndRegister = async () => {
+      const txnId = new URLSearchParams(window.location.search).get("transactionId");
+      const storedFormData = JSON.parse(localStorage.getItem("formData"));
+      totalAmount = Number(storedFormData.amount) || 0;
+      const eventID = localStorage.getItem("eventID");
+
+      if (!txnId || !storedFormData || !eventID) {
+        toast.error("Missing payment or registration data.");
+        navigate("/");
+        return;
+      }
+
+      setTransactionId(txnId);
+      localStorage.setItem("transactionID", txnId);
+      setFormData(storedFormData);
+
+      const amount = Number(storedFormData.amount) || 0;
+      let platformFee = 0;
+      let rolePrice = 0;
+
+      const feeRate = admin?.category === 'Entertainment Events / concerts' ? 0.05 : 0.025;
+      rolePrice = amount / (1 + feeRate);         
+      platformFee = amount - rolePrice;           
+      const userAmount = rolePrice;
+
+
+      setBreakdown({
+        amount: userAmount,
+        platformFee,
+        total: amount,
+      });
+
+      try {
+        // Check for existing registration
+        const checkEmailRes = await axios.post(`${BASE_URL}/users/check-email`, {
+          email: storedFormData.email || storedFormData.EMAIL,
+          eventId: eventID,
+        });
+
+        if (!checkEmailRes.data.exists) {
+          toast.error("Please complete the payment before registration.");
+          navigate("/");
+          return;
+        }
+
+        // Proceed with registration
+        await axios.post(`${BASE_URL}/users/register`, {
+          formData: storedFormData,
+          eventID,
+          transactionId: txnId,
+        });
+
+        toast.success("Registration successful!");
+        localStorage.removeItem("formData");
+        localStorage.removeItem("eventID");
+        navigate(`/success/${eventID}`);
+      } catch (error) {
+        toast.error("Error during registration.");
+        console.error(error);
+        navigate("/");
+      }
+    };
+
+    verifyAndRegister();
+  }, []);
 
   return (
     <div className="p-6 max-w-xl mx-auto text-center text-lg font-sans bg-gray-50 min-h-screen">

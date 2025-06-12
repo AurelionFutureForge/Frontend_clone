@@ -16,9 +16,9 @@ const InvoiceTemplate = ({ user, category }) => {
   const GST_NO = "29AACCF1132H2ZX";
 
   const platformFeeRate = category === "Entertainment Events / concerts" ? 5 : 2.5;
-  const platformFee = (amount * platformFeeRate) / 100;
-  const ticketPrice = amount - platformFee;
-  const total = ticketPrice + platformFee;
+  const total = amount; 
+  const ticketPrice = total / (1 + platformFeeRate / 100);
+  const platformFee = total - ticketPrice;
 
   return (
     <div
