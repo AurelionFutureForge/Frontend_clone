@@ -149,23 +149,23 @@ function Home() {
 
           <nav className="flex flex-col gap-5 text-sm bg-white min-h-screen ml-[-24px] pl-4 w-[255px]">
             <Link to="/" className="flex items-center space-x-5 hover:text-red-600" onClick={(e) => {
-                e.preventDefault();
-                scrollToEvents(e);
-              }}>
+              e.preventDefault();
+              scrollToEvents(e);
+            }}>
               <Calendar className="w-5 h-5" />
               <span>Events</span>
             </Link>
             <Link to="/" className="flex items-center space-x-5 hover:text-red-600" onClick={(e) => {
-                e.preventDefault();
-                scrollToAnalytics(e);
-              }}>
+              e.preventDefault();
+              scrollToAnalytics(e);
+            }}>
               <BarChart3 className="w-5 h-5" />
               <span>Analytics</span>
             </Link>
             <Link to="/" className="flex items-center space-x-5 hover:text-red-600" onClick={(e) => {
-                e.preventDefault();
-                scrollToAttendees(e);
-              }}>
+              e.preventDefault();
+              scrollToAttendees(e);
+            }}>
               <Users className="w-5 h-5" />
               <span>Attendees</span>
             </Link>
@@ -478,8 +478,26 @@ function Home() {
         </div>
       </section>
 
+    <div className="flex justify-center">
+      <a
+        href="https://www.producthunt.com/products/stagyn-io?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-stagyn-io"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=977039&theme=light&t=1749640554857"
+          alt="Stagyn.io - Where Your backstage meets the Engine | Product Hunt"
+          style={{ width: "250px", height: "54px" }}
+          width="250"
+          height="54"
+        />
+      </a>
+    </div>
+
+
+
       {/* Footer */}
-      <footer className="bg-black text-white py-16">
+      <footer className="bg-black text-white py-16 mt-5">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 ml-20">
             {/* Company Info */}

@@ -11,6 +11,8 @@ function PaymentSuccess() {
   const [breakdown, setBreakdown] = useState(null);
   const [formData, setFormData] = useState(null);
   const [transactionId, setTransactionId] = useState("");
+  const [event, setEvent] = useState(null);
+  const [admin, setAdmin] = useState(null);
 
   useEffect(() => {
     const verifyAndRegister = async () => {
@@ -72,6 +74,42 @@ function PaymentSuccess() {
     verifyAndRegister();
   }, []);
 
+  const eventID = localStorage.getItem("eventID");
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/events/${eventID}`);
+        setEvent(response.data);
+      } catch (error) {
+        toast.error("Failed to fetch event details. Please try again.");
+      }
+    };
+
+    if (eventID) {
+      fetchEventDetails();
+    } else {
+      toast.error("No event selected.");
+    }
+  }, [eventID, BASE_URL]);
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      if (!event?.companyName) return;
+
+      try {
+        const companyName = event.companyName;
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        setAdmin(adminRes.data);
+        console.log("adminRes:", adminRes);
+        console.log(adminRes.data);
+      } catch (error) {
+        console.error("Error fetching admin:", error);
+      }
+    };
+
+    fetchAdmin();
+  }, [event?.companyName, BASE_URL]);
+
   const generatePDF = () => {
     const element = document.getElementById("invoice");
     import("html2pdf.js").then((html2pdf) => {
@@ -82,12 +120,19 @@ function PaymentSuccess() {
   // Prepare the user object expected by InvoiceTemplate
   const user = formData
     ? {
-        registrationData: formData,
-        role: formData.role || formData.ROLE || "N/A",
-        transactionId,
-        paymentStatus: "Success", // or set dynamically if you have status
-      }
+      registrationData: formData,
+      role: formData.role || formData.ROLE || "N/A",
+      transactionId,
+      paymentStatus: "Success", // or set dynamically if you have status
+    }
     : null;
+
+  let platformFee;
+  if (admin?.category === 'Entertainment Events / concerts') {
+    platformFee = (rolePrice * 5) / 100;
+  } else {
+    platformFee = (rolePrice * 2.5) / 100;
+  }
 
   return (
     <div className="p-6 max-w-xl mx-auto text-center text-lg font-sans bg-gray-50 min-h-screen">
@@ -99,7 +144,11 @@ function PaymentSuccess() {
             <span>₹{breakdown.amount.toFixed(2)}</span>
           </div>
           <div className="flex justify-between py-2 text-gray-700">
-            <span>Platform Fee (2.5%)</span>
+            <span>
+              Platform Fee (
+              {admin?.category === "Entertainment Events / concerts" ? "5%" : "2.5%"}
+              ):
+            </span>
             <span>₹{breakdown.platformFee.toFixed(2)}</span>
           </div>
           <div className="flex justify-between font-semibold border-t border-gray-300 mt-4 pt-3 text-gray-900 text-lg">
@@ -111,7 +160,7 @@ function PaymentSuccess() {
 
       {user && (
         <>
-          <InvoiceTemplate user={user} />
+          <InvoiceTemplate user={user} category={admin?.category?.trim() || ""} />
           <button
             className="mt-8 px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors duration-300 shadow-md"
             onClick={generatePDF}

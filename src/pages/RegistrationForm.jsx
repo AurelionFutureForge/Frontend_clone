@@ -32,7 +32,7 @@ function RegistrationForm() {
   const [formVisible, setFormVisible] = useState(true);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [admin, setAdmin] = useState('');
+  const [admin, setAdmin] = useState(null);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const { eventID } = useParams();
@@ -57,11 +57,6 @@ function RegistrationForm() {
           `${BASE_URL}/users/${eventID}/role-registrations`
         );
         setRoleRegistrations(regRes.data);
-
-        const companyName = event.companyName;
-        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
-        setAdmin(adminRes.data);
-
         setLoading(false);
       } catch (error) {
         toast.error("Failed to fetch event details. Please try again.");
@@ -76,6 +71,24 @@ function RegistrationForm() {
       setLoading(false);
     }
   }, [eventID, BASE_URL]);
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      if (!event?.companyName) return;
+
+      try {
+        const companyName = event.companyName;
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        setAdmin(adminRes.data);
+        console.log("adminRes:", adminRes);
+        console.log(adminRes.data);
+      } catch (error) {
+        console.error("Error fetching admin:", error);
+      }
+    };
+
+    fetchAdmin();
+  }, [event?.companyName, BASE_URL]);
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
@@ -214,7 +227,7 @@ function RegistrationForm() {
       localStorage.setItem("eventID", eventID);
 
       const res = await axios.post(`${BASE_URL}/api/phonepe/initiate-payment`, {
-        amount: (rolePrice * 1.025).toFixed(2),
+        amount: calculatedAmount,
         email: formData.EMAIL,
         eventId: eventID,
       });
@@ -450,7 +463,7 @@ function RegistrationForm() {
                 const rolePrice = parseFloat(selectedRole.rolePrice);
                 let platformFee;
 
-                if (admin.category === "Entertainment Events / concerts") {
+                if (admin?.category === 'Entertainment Events / concerts') {
                   platformFee = (rolePrice * 5) / 100;
                 } else {
                   platformFee = (rolePrice * 2.5) / 100;

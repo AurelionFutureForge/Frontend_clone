@@ -30,6 +30,7 @@ function SuccessPage() {
   const [showConfetti, setShowConfetti] = useState(false);
   const transactionID = localStorage.getItem("transactionID");
   const [registeredUser, setRegisteredUser] = useState(null);
+  const [admin, setAdmin] = useState(null);
 
 
   useEffect(() => {
@@ -61,6 +62,22 @@ function SuccessPage() {
 
     return () => clearTimeout(timer);
   }, [eventID, BASE_URL, transactionID]);
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      if (!event?.companyName) return;
+
+      try {
+        const companyName = event.companyName;
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        setAdmin(adminRes.data);
+      } catch (error) {
+        console.error("Error fetching admin:", error);
+      }
+    };
+
+    fetchAdmin();
+  }, [event?.companyName, BASE_URL]);
 
   if (!event) {
     return (
@@ -182,7 +199,7 @@ function SuccessPage() {
                 zIndex: -9999,
               }}
             >
-              <InvoiceTemplate user={registeredUser} />
+              <InvoiceTemplate user={user} category={admin?.category?.trim() || ""} />
             </div>
 
             <button

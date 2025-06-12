@@ -1,6 +1,6 @@
 import React from "react";
 
-const InvoiceTemplate = ({ user }) => {
+const InvoiceTemplate = ({ user, category }) => {
   const {
     registrationData: { NAME, EMAIL, amount },
     role,
@@ -15,7 +15,8 @@ const InvoiceTemplate = ({ user }) => {
 
   const GST_NO = "29AACCF1132H2ZX";
 
-  const platformFee = (amount * 2.5) / 100;
+  const platformFeeRate = category === "Entertainment Events / concerts" ? 5 : 2.5;
+  const platformFee = (amount * platformFeeRate) / 100;
   const ticketPrice = amount - platformFee;
   const total = ticketPrice + platformFee;
 
@@ -179,7 +180,7 @@ const InvoiceTemplate = ({ user }) => {
           Ticket Price: <span style={{ fontWeight: "600" }}>₹{ticketPrice.toFixed(2)}</span>
         </p>
         <p>
-          Platform Fee (2.5%): <span style={{ fontWeight: "600" }}>₹{platformFee.toFixed(2)}</span>
+          Platform Fee ({platformFeeRate}%): <span style={{ fontWeight: "600" }}>₹{platformFee.toFixed(2)}</span>
         </p>
         <p style={{ fontSize: "18px", fontWeight: "800", marginTop: "10px" }}>
           Total: ₹{total.toFixed(2)}

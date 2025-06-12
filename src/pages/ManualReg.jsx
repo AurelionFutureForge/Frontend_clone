@@ -31,6 +31,7 @@ function ManualReg() {
   const eventID = localStorage.getItem("selectedEvent");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [admin, setAdmin] = useState(null);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -55,6 +56,24 @@ function ManualReg() {
       setLoading(false);
     }
   }, [eventID, BASE_URL]);
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      if (!event?.companyName) return;
+
+      try {
+        const companyName = event.companyName;
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        setAdmin(adminRes.data);
+        console.log("adminRes:", adminRes);
+        console.log(adminRes.data);
+      } catch (error) {
+        console.error("Error fetching admin:", error);
+      }
+    };
+
+    fetchAdmin();
+  }, [event?.companyName, BASE_URL]);
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
@@ -100,7 +119,11 @@ function ManualReg() {
         toast.error("You have already registered for this event with this email.");
         return;
       }
-      const calculatedAmount = parseFloat((selectedRoleData.rolePrice * 1.025).toFixed(2));
+
+      const feePercent = admin?.category === "Entertainment Events / concerts" ? 5 : 2.5;
+      const multiplier = 1 + feePercent / 100;
+      const calculatedAmount = parseFloat((selectedRoleData.rolePrice * multiplier).toFixed(2));
+
 
       const updatedFormData = {
         ...formData,
@@ -111,7 +134,7 @@ function ManualReg() {
       localStorage.setItem("eventID", eventID);
 
       const res = await axios.post(`${BASE_URL}/api/phonepe/initiate-payment`, {
-        amount: (amount * 1.025).toFixed(2), email: formData.EMAIL, eventId: eventID
+        amount: calculatedAmount, email: formData.EMAIL, eventId: eventID
       });
 
       const { redirectUrl } = res.data;
@@ -206,13 +229,13 @@ function ManualReg() {
     (role) => role.roleName === formData.role
   );
 
-    const handleFreeRegistration = async () => {
-      setIsLoading(true);
+  const handleFreeRegistration = async () => {
+    setIsLoading(true);
     try {
       console.log(formData);
       console.log(eventID);
       const response = await axios.post(
-        `${BASE_URL}/users/freeRegister`, 
+        `${BASE_URL}/users/freeRegister`,
         {
           formData,
           eventID,
@@ -430,8 +453,12 @@ function ManualReg() {
                 </button>
               );
             }
-
-            const platformFee = (rolePrice * 2.5) / 100;
+            let platformFee;
+            if (admin?.category === 'Entertainment Events / concerts') {
+              platformFee = (rolePrice * 5) / 100;
+            } else {
+              platformFee = (rolePrice * 2.5) / 100;
+            }
             const totalAmount = rolePrice + platformFee;
 
             return (
@@ -442,7 +469,11 @@ function ManualReg() {
                     <span>₹{rolePrice.toFixed(2)}</span>
                   </p>
                   <p className="flex justify-between text-[12px]">
-                    <span>Platform Fee (2.5%):</span>
+                    <span>
+                      Platform Fee (
+                      {admin?.category === "Entertainment Events / concerts" ? "5%" : "2.5%"}
+                      ):
+                    </span>
                     <span>₹{platformFee.toFixed(2)}</span>
                   </p>
                   <hr className="my-1 border-blue-300" />
@@ -458,7 +489,7 @@ function ManualReg() {
                   onClick={handlePayment}
                   disabled={isLoading}
                 >
-                 {isLoading ? 'Processing...' : `Pay ₹${totalAmount.toFixed(2)}`}
+                  {isLoading ? 'Processing...' : `Pay ₹${totalAmount.toFixed(2)}`}
                 </button>
                 <div className="flex items-center justify-center space-x-2 mt-5">
                   <ShieldCheck className="w-7 h-7 text-green-600" />
