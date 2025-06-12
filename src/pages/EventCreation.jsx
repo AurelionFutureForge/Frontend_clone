@@ -490,6 +490,7 @@ export default function EventCreation() {
               className="w-full p-3 mb-4 border rounded-lg shadow-sm"
               onChange={handleChange}
               value={eventDetails.startDate}
+              min={new Date().toISOString().split("T")[0]} 
             />
             <label>End Date</label>
             <input
@@ -499,6 +500,7 @@ export default function EventCreation() {
               className="w-full p-3 mb-4 border rounded-lg shadow-sm"
               onChange={handleChange}
               value={eventDetails.endDate}
+              min={new Date().toISOString().split("T")[0]} 
             />
 
             <div className="mb-6">

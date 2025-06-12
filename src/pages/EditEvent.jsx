@@ -214,7 +214,7 @@ export default function EditEvent() {
 
         <input type="date" name="startDate"
           className="w-full p-3 mb-4 border rounded"
-          value={sDate} onChange={handleChange} />
+          value={sDate} onChange={handleChange} min={new Date().toISOString().split("T")[0]}  />
 
         {eventDetails.endDate && (
           <input
@@ -223,6 +223,7 @@ export default function EditEvent() {
             className="w-full p-3 mb-4 border rounded"
             value={eDate}
             onChange={handleChange}
+            min={new Date().toISOString().split("T")[0]} 
           />
         )}
 
