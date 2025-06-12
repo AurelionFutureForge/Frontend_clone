@@ -120,9 +120,11 @@ function ManualReg() {
         return;
       }
 
+
       const feePercent = admin?.category === "Entertainment Events / concerts" ? 5 : 2.5;
-      const multiplier = 1 + feePercent / 100;
-      const calculatedAmount = parseFloat((selectedRoleData.rolePrice * multiplier).toFixed(2));
+      const rawPlatformFee = (amount * feePercent) / 100;
+      const platformFee = Math.round(rawPlatformFee * 100) / 100;
+      const calculatedAmount = parseFloat((amount + platformFee).toFixed(2));
 
 
       const updatedFormData = {
@@ -453,13 +455,12 @@ function ManualReg() {
                 </button>
               );
             }
-            let platformFee;
-            if (admin?.category === 'Entertainment Events / concerts') {
-              platformFee = (rolePrice * 5) / 100;
-            } else {
-              platformFee = (rolePrice * 2.5) / 100;
-            }
-            const totalAmount = rolePrice + platformFee;
+                const feeRate = admin?.category === 'Entertainment Events / concerts' ? 0.05 : 0.025;
+                const rawPlatformFee = rolePrice * feeRate;
+                const platformFee = Math.round(rawPlatformFee * 100) / 100;
+
+
+                const totalAmount = rolePrice + platformFee;
 
             return (
               <>
