@@ -75,6 +75,7 @@ function PaymentSuccess() {
 
   platformFee = totalAmount - rolePrice;
   useEffect(() => {
+     if (!admin) return;
     const verifyAndRegister = async () => {
       const txnId = new URLSearchParams(window.location.search).get("transactionId");
       const storedFormData = JSON.parse(localStorage.getItem("formData"));
@@ -139,7 +140,7 @@ function PaymentSuccess() {
     };
 
     verifyAndRegister();
-  }, []);
+  }, [admin]);
 
   return (
     <div className="p-6 max-w-xl mx-auto text-center text-lg font-sans bg-gray-50 min-h-screen">

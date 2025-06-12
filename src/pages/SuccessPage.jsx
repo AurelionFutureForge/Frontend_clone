@@ -199,7 +199,7 @@ function SuccessPage() {
                 zIndex: -9999,
               }}
             >
-              <InvoiceTemplate user={user} category={admin?.category?.trim() || ""} />
+              <InvoiceTemplate user={registeredUser} category={admin?.category?.trim() || ""} />
             </div>
 
             <button
