@@ -461,13 +461,11 @@ function RegistrationForm() {
             <>
               {selectedRole && (() => {
                 const rolePrice = parseFloat(selectedRole.rolePrice);
-                let platformFee;
-
-                if (admin?.category === 'Entertainment Events / concerts') {
-                  platformFee = (rolePrice * 5) / 100;
-                } else {
-                  platformFee = (rolePrice * 2.5) / 100;
-                }
+                const feeRate = admin?.category === 'Entertainment Events / concerts'? 0.05 : 0.025 ;
+                const rawPlatformFee = rolePrice * feeRate;
+                const platformFee = Math.round(rawPlatformFee * 100) / 100;
+          
+              
                 const totalAmount = rolePrice + platformFee;
 
                 return (
