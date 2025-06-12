@@ -129,9 +129,6 @@ export default function EventCreation() {
     if (!companyName || !eventName || !place || !time || !startDate || eventRoles.length === 0) {
       setError("All fields are required, including at least one role.");
       return false;
-    } else if (comp != companyName) {
-      setError("Company Name should be same as given in the registration.");
-      return false;
     }
     setError('');
     return true;

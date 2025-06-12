@@ -77,8 +77,15 @@ function RegistrationForm() {
       if (!event?.companyName) return;
 
       try {
-        const companyName = event.companyName;
-        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        let companyName = event.companyName;
+        companyName = companyName
+          .replace(/\+/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        console.log("..",companyName);
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin`, {
+          params: { companyName : companyName.trim() }
+        });
         setAdmin(adminRes.data);
         console.log("adminRes:", adminRes);
         console.log(adminRes.data);

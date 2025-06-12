@@ -62,8 +62,15 @@ function ManualReg() {
       if (!event?.companyName) return;
 
       try {
-        const companyName = event.companyName;
-        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        let companyName = event.companyName;
+        companyName = companyName
+          .replace(/\+/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        console.log("..", companyName);
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin`, {
+          params: { companyName: companyName.trim() }
+        });
         setAdmin(adminRes.data);
         console.log("adminRes:", adminRes);
         console.log(adminRes.data);
@@ -455,12 +462,12 @@ function ManualReg() {
                 </button>
               );
             }
-                const feeRate = admin?.category === 'Entertainment Events / concerts' ? 0.05 : 0.025;
-                const rawPlatformFee = rolePrice * feeRate;
-                const platformFee = Math.round(rawPlatformFee * 100) / 100;
+            const feeRate = admin?.category === 'Entertainment Events / concerts' ? 0.05 : 0.025;
+            const rawPlatformFee = rolePrice * feeRate;
+            const platformFee = Math.round(rawPlatformFee * 100) / 100;
 
 
-                const totalAmount = rolePrice + platformFee;
+            const totalAmount = rolePrice + platformFee;
 
             return (
               <>

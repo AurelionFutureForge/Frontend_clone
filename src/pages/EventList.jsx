@@ -10,20 +10,27 @@ function EventList() {
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const companyName = localStorage.getItem("adminCompanyName");
+  let companyName = localStorage.getItem("adminCompanyName")
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("admin_token");
+        companyName = companyName
+          .replace(/\+/g, " ")         
+          .replace(/\s+/g, " ")        
+          .trim();                     
+
+        console.log("Cleaned companyName:", `"${companyName}"`);
         if (!token) {
           toast.error("Unauthorized! Please log in.");
           navigate("/admin/login");
           return;
         }
-
+        console.log(companyName);
         const response = await axios.get(`${BASE_URL}/admin/events`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { companyName },
