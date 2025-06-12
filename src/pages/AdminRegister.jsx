@@ -63,7 +63,7 @@ function AdminRegister() {
           </div>
 
           <div className="relative">
-            <label className="block text-gray-700 font-medium">Password</label>
+            <label className="block text-gray-700 font-medium">Create Password</label>
             <input
               type={showPassword ? "text" : "password"}
               className="w-full p-3 pr-10 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
@@ -95,7 +95,7 @@ function AdminRegister() {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium">Using stagyn for ? </label>
+            <label className="block text-gray-700 font-medium">Using stagyn for</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -111,7 +111,7 @@ function AdminRegister() {
 
 
           <div>
-            <label className="block text-gray-700 font-medium">Location</label>
+            <label className="block text-gray-700 font-medium">City</label>
             <input
               type="text"
               className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
