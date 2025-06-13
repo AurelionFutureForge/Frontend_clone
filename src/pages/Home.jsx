@@ -561,25 +561,27 @@ function Home() {
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <p className="text-gray-400">
-                <span className="font-semibold text-white">Number:</span>{' '}
-                <a href="tel:9791640220" className="hover:underline text-gray-400">
-                  9791640220
-                </a>
-              </p>
-              <p className="text-gray-400">
-                <span className="font-semibold text-white">Email:</span>{' '}
-                <a href="mailto:stagynbusiness@gmail.com" className="hover:underline text-gray-400">
-                  stagynbusiness@gmail.com
-                </a>
-              </p>
-              <p className="text-gray-400">
-                <span className="font-semibold text-white">Address:</span> Sembakkam, Chromepet
-              </p>
+            <div className="space-y-4"> 
+              <h3 className="text-lg font-semibold mb-5">Contact</h3>
+              <div className="space-y-2 text-gray-400">
+                <p>
+                  <span className="font-semibold text-white">Number:</span>{' '}
+                  <a href="tel:9791640220" className="hover:underline">9791640220</a>
+                </p>
+                <p>
+                  <span className="font-semibold text-white">Email:</span>{' '}
+                  <a href="mailto:stagynbusiness@gmail.com" className="hover:underline">
+                    stagynbusiness@gmail.com
+                  </a>
+                </p>
+                <p>
+                  <span className="font-semibold text-white">Address:</span>{' '}
+                  Sembakkam, Chromepet
+                </p>
+              </div>
             </div>
           </div>
+
 
           {/* Bottom copyright line */}
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
