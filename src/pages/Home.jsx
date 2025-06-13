@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { Calendar, BarChart3, Banknote, Users, ArrowUpRight, Shield, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X } from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 import logo from '../assets/stagyn_black.png'
+import logo2 from '../assets/stagyn_title.png'
 
 function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [firstName, setFisrtName] = useState("John");
-  const [lastName, setLastName] = useState("Doe");
+  const [firstName, setFisrtName] = useState("Dhanush");
+  const [lastName, setLastName] = useState("ashok");
   const [ticket, setTicket] = useState("General Admission $500");
-  const [mail, setMail] = useState("john@example.com");
+  const [mail, setMail] = useState("stagynbusiness@gmail.com ");
   const eventsRef = useRef(null);
   const analyticsRef = useRef(null);
   const attendeesRef = useRef(null);
@@ -407,7 +408,7 @@ function Home() {
                   <label className="block mb-1 text-black font-semibold">First Name</label>
                   <input
                     type="text"
-                    placeholder="John"
+                    placeholder=" Dhanush"
                     className="w-full px-4 py-2 border rounded mt-2"
                     value={firstName}
                     onChange={(e) => setFisrtName(e.target.value)}
@@ -417,7 +418,7 @@ function Home() {
                   <label className="block mb-1 text-black font-semibold">Last Name</label>
                   <input
                     type="text"
-                    placeholder="Doe"
+                    placeholder="ashok"
                     className="w-full px-4 py-2 border rounded mt-2"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
@@ -429,7 +430,7 @@ function Home() {
                 <label className="block mb-1 text-black font-semibold">E-Mail</label>
                 <input
                   type="email"
-                  placeholder="john@example.com"
+                  placeholder="stagynbusiness@gmail.com "
                   className="w-full px-4 py-2 border rounded mt-2"
                   value={mail}
                   onChange={(e) => setMail(e.target.value)}
@@ -478,35 +479,36 @@ function Home() {
         </div>
       </section>
 
-    <div className="flex justify-center">
-      <a
-        href="https://www.producthunt.com/products/stagyn-io?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-stagyn-io"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=977039&theme=light&t=1749640554857"
-          alt="Stagyn.io - Where Your backstage meets the Engine | Product Hunt"
-          style={{ width: "250px", height: "54px" }}
-          width="250"
-          height="54"
-        />
-      </a>
-    </div>
+      <div className="flex justify-center">
+        <a
+          href="https://www.producthunt.com/products/stagyn-io?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-stagyn-io"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=977039&theme=light&t=1749640554857"
+            alt="Stagyn.io - Where Your backstage meets the Engine | Product Hunt"
+            style={{ width: "250px", height: "54px" }}
+            width="250"
+            height="54"
+          />
+        </a>
+      </div>
 
 
 
       {/* Footer */}
       <footer className="bg-black text-white py-16 mt-5">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 ml-20">
+          {/* Grid Section */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 ml-14">
             {/* Company Info */}
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="w-5 h-5 text-white" />
+                <div className="flex items-center space-x-2">
+                  <img src={logo2} alt="stagyn.io Logo" className="w-8 h-8 rounded-lg object-contain" />
+                  <span className="text-2xl font-bold">stagyn.io</span>
                 </div>
-                <span className="text-2xl font-bold">stagyn.io</span>
               </div>
               <p className="text-gray-400 leading-relaxed">
                 Intelligent event registration to analytics platform.
@@ -557,8 +559,29 @@ function Home() {
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms</a></li>
               </ul>
             </div>
+
+            {/* Contact Info */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold mb-4">Contact</h3>
+              <p className="text-gray-400">
+                <span className="font-semibold text-white">Number:</span>{' '}
+                <a href="tel:9791640220" className="hover:underline text-gray-400">
+                  9791640220
+                </a>
+              </p>
+              <p className="text-gray-400">
+                <span className="font-semibold text-white">Email:</span>{' '}
+                <a href="mailto:stagynbusiness@gmail.com" className="hover:underline text-gray-400">
+                  stagynbusiness@gmail.com
+                </a>
+              </p>
+              <p className="text-gray-400">
+                <span className="font-semibold text-white">Address:</span> Sembakkam, Chromepet
+              </p>
+            </div>
           </div>
 
+          {/* Bottom copyright line */}
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
             <p className="text-gray-400">
               © 2025 stagyn.io. All rights reserved.
@@ -566,6 +589,8 @@ function Home() {
           </div>
         </div>
       </footer>
+
+
     </div>
   );
 }
