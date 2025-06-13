@@ -562,21 +562,20 @@ function Home() {
 
             {/* Contact Info */}
             <div className="space-y-4"> 
-              <h3 className="text-lg font-semibold mb-5">Contact</h3>
+              <h3 className="text-lg font-semibold mb-">Contact</h3>
               <div className="space-y-2 text-gray-400">
                 <p>
                   <span className="font-semibold text-white">Number:</span>{' '}
                   <a href="tel:9791640220" className="hover:underline">9791640220</a>
                 </p>
                 <p>
-                  <span className="font-semibold text-white">Email:</span>{' '}
+                  <span className="font-semibold text-white">Email:{' '}</span>
                   <a href="mailto:stagynbusiness@gmail.com" className="hover:underline">
                     stagynbusiness@gmail.com
                   </a>
                 </p>
                 <p>
-                  <span className="font-semibold text-white">Address:</span>{' '}
-                  Sembakkam, Chromepet
+                  <span className="font-semibold text-white">Address: <span className="text-gray-400 font-light">Sembakkam, Chromepet</span></span>
                 </p>
               </div>
             </div>
