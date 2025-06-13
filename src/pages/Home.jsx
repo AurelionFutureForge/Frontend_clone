@@ -498,98 +498,99 @@ function Home() {
 
 
       {/* Footer */}
-      <footer className="bg-black text-white py-16 mt-5">
-        <div className="container mx-auto px-4">
-          {/* Grid Section */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 ml-14">
-            {/* Company Info */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2">
-                  <img src={logo2} alt="stagyn.io Logo" className="w-8 h-8 rounded-lg object-contain" />
-                  <span className="text-2xl font-bold">stagyn.io</span>
-                </div>
-              </div>
-              <p className="text-gray-400 leading-relaxed">
-                Intelligent event registration to analytics platform.
-                Transform your events with AI-powered insights.
-              </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <Github className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Product Links */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Product</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">API</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Integrations</a></li>
-              </ul>
-            </div>
-
-            {/* Resources */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Resources</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Community</a></li>
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Company</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms</a></li>
-              </ul>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-4"> 
-              <h3 className="text-lg font-semibold mb-">Contact</h3>
-              <div className="space-y-2 text-gray-400">
-                <p>
-                  <span className="font-semibold text-white">Number:</span>{' '}
-                  <a href="tel:9791640220" className="hover:underline">9791640220</a>
-                </p>
-                <p>
-                  <span className="font-semibold text-white">Email:{' '}</span>
-                  <a href="mailto:stagynbusiness@gmail.com" className="hover:underline">
-                    stagynbusiness@gmail.com
-                  </a>
-                </p>
-                <p>
-                  <span className="font-semibold text-white">Address: <span className="text-gray-400 font-light">Sembakkam, Chromepet</span></span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-
-          {/* Bottom copyright line */}
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
-            <p className="text-gray-400">
-              © 2025 stagyn.io. All rights reserved.
-            </p>
-          </div>
+     <footer className="bg-black text-white py-16 mt-5">
+  <div className="container mx-auto px-4">
+    {/* Grid Section - 4 Columns */}
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 ml-14">
+      {/* Company Info */}
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <img src={logo2} alt="stagyn.io Logo" className="w-8 h-8 rounded-lg object-contain" />
+          <span className="text-2xl font-bold">stagyn.io</span>
         </div>
-      </footer>
+        <p className="text-gray-400 leading-relaxed">
+          Intelligent event registration to analytics platform.
+          Transform your events with AI-powered insights.
+        </p>
+        <div className="flex space-x-4">
+          <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <Twitter className="w-5 h-5" />
+          </a>
+          <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <Linkedin className="w-5 h-5" />
+          </a>
+          <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <Github className="w-5 h-5" />
+          </a>
+        </div>
+      </div>
+
+      {/* Product Links */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Product</h3>
+        <ul className="space-y-2">
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">API</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Integrations</a></li>
+        </ul>
+      </div>
+
+      {/* Resources */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Resources</h3>
+        <ul className="space-y-2">
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Community</a></li>
+        </ul>
+      </div>
+
+      {/* Company */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Company</h3>
+        <ul className="space-y-2">
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</a></li>
+          <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {/* Contact Section - Below the Grid */}
+    <div className="mt-12 ml-14">
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold mb-5">Contact</h3>
+        <div className="space-y-2 text-gray-400">
+          <p>
+            <span className="font-semibold text-white">Number:</span>{' '}
+            <a href="tel:9791640220" className="hover:underline">9791640220</a>
+          </p>
+          <p>
+            <span className="font-semibold text-white">Email:</span>{' '}
+            <a href="mailto:stagynbusiness@gmail.com" className="hover:underline">
+              stagynbusiness@gmail.com
+            </a>
+          </p>
+          <p>
+            <span className="font-semibold text-white">Address:</span>{' '}
+            Sembakkam, Chromepet
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Footer Bottom Line */}
+    <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+      <p className="text-gray-400">
+        © 2025 stagyn.io. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
+
 
 
     </div>
