@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { AlertTriangle, MapPin, Calendar, Clock } from 'lucide-react'
+import { AlertTriangle, MapPin, Calendar, Clock, Timer } from 'lucide-react'
 import { useParams, useNavigate } from "react-router-dom";
 import logo from '../assets/stagyn_black.png'
 import { ShieldCheck } from 'lucide-react'
@@ -33,6 +33,7 @@ function RegistrationForm() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [admin, setAdmin] = useState(null);
+  const [countdown, setCountdown] = useState("");
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const { eventID } = useParams();
@@ -82,9 +83,9 @@ function RegistrationForm() {
           .replace(/\+/g, " ")
           .replace(/\s+/g, " ")
           .trim();
-        console.log("..",companyName);
+        console.log("..", companyName);
         const adminRes = await axios.get(`${BASE_URL}/admin/get-admin`, {
-          params: { companyName : companyName.trim() }
+          params: { companyName: companyName.trim() }
         });
         setAdmin(adminRes.data);
         console.log("adminRes:", adminRes);
@@ -96,6 +97,31 @@ function RegistrationForm() {
 
     fetchAdmin();
   }, [event?.companyName, BASE_URL]);
+
+  useEffect(() => {
+    if (!event?.startDate) return;
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const start = new Date(event.startDate);
+      const diff = start - now;
+
+      if (diff <= 0) {
+        setCountdown("Event Started");
+        clearInterval(interval);
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      setCountdown(`${days}D : ${hours}H : ${minutes}M : ${seconds}S`);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [event?.startDate]);
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
@@ -285,85 +311,96 @@ function RegistrationForm() {
     }
   };
 
+
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 p-6 flex flex-col items-center justify-between">
-      <div className="bg-white p-6 shadow-xl rounded-2xl max-w-2xl mx-auto">
+    <div className="bg-gray-100">
+      <div className="min-h-screen bg-gray-100 p-6 flex flex-col lg:flex-row relative">
+        {/* 🖼️ Poster Card on Left */}
         {event.companyPoster && (
-          <div className="flex justify-center mb-4">
+          <div className="w-full lg:mr-[432px] bg-gray-100 shadow-lg rounded-xl p-4 mt-[-10px]">
             <img
               src={event.companyPoster}
               alt="Company Poster"
-              className="w-full h-auto rounded-lg"
+              className="w-full h-auto  object-cover rounded-md"
             />
           </div>
         )}
-        <br />
-        <h2 className="text-4xl font-extrabold text-black mb-4 text-center">
-          Register for {event.eventName}
-        </h2>
 
-        <div className="text-center text-gray-600 mb-6 space-y-2">
-          {event.startDate && (
-            <p className="flex justify-center items-center gap-2">
-              <Calendar className="w-4 h-4 text-purple-500" />
-              <span className="font-semibold">Date:</span>{" "}
-              {event.endDate &&
-                !isNaN(new Date(event.endDate)) &&
-                new Date(event.startDate).toLocaleDateString() !== new Date(event.endDate).toLocaleDateString()
-                ? `${new Date(event.startDate).toLocaleDateString()} - ${new Date(event.endDate).toLocaleDateString()}`
-                : new Date(event.startDate).toLocaleDateString()}
-            </p>
-          )}
+        {/* 📝 Registration Content */}
+        <div
+          className="w-full lg:w-[400px] bg-white p-6 shadow-lg overflow-y-auto flex flex-col  lg:mt-0 mt-6 border border-gray-400 rounded-xl
+             lg:fixed lg:right-4 lg:top-4 lg:h-[90vh]"
+        >
 
-          {event.place && (
-            <div className="flex justify-center items-center gap-2 text-sm sm:text-base">
-              <MapPin className="w-4 h-4 text-blue-500" />
-              <span className="font-semibold">Location:</span>
-              <span>{event.place}</span>
-            </div>
-          )}
+          <h2 className="text-4xl font-extrabold text-black mb-4 text-center lg:text-left">
+            {event.eventName}
+          </h2>
 
+          <div className="flex flex-col gap-4 text-sm sm:text-base text-gray-600 mb-6 mt-6">
+            {event.startDate && (
+              <p className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-purple-500" />
+                <span className="font-semibold">Date:</span>{" "}
+                {event.endDate &&
+                  new Date(event.startDate).toDateString() !==
+                  new Date(event.endDate).toDateString()
+                  ? `${new Date(event.startDate).toLocaleDateString()} - ${new Date(
+                    event.endDate
+                  ).toLocaleDateString()}`
+                  : new Date(event.startDate).toLocaleDateString()}
+              </p>
+            )}
 
-          {event.time && (
-            <p className="flex justify-center items-center gap-2">
-              <Clock className="w-4 h-4 text-orange-500" />
-              <span className="font-semibold">Time:</span> {event.time}
-            </p>
-          )}
+            {event.time && (
+              <p className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-orange-500" />
+                <span className="font-semibold">Time:</span> {event.time}
+              </p>
+            )}
+
+            {event.place && (
+              <div className="flex items-center gap-2">
+                <MapPin className="w-7 h-7 text-blue-500" />
+                <span className="font-semibold">Location:</span>
+                <span>{event.place}</span>
+              </div>
+            )}
+
+            {countdown && (
+              <div className="flex flex-col items-start gap-1 text-gray-600 font-semibold">
+                <div className="flex items-center gap-2">
+                  <Timer className="w-5 h-5" />
+                  <span>Event Starts In:</span>
+                </div>
+                <div className="ml-7 mt-3 text-2xl text-black font-semibold">
+                  {countdown}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="mt-42 pt-4 border-t border-gray-300 space-y-2 ">
+            <p className="text-gray-600 font-semibold">Hosted By</p>
+            <p className="text-black text-xl">{event.companyName}</p>
+          </div>
         </div>
-        <form>
+      </div>
+
+
+      <div className="bg-white p-6  shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full lg:w-[1042px] mt-2 ml-6 ">
+        <form className="w-full">
+          {/* Custom Fields */}
           {otherFields.map((field, idx) => (
             <div key={idx} className="mb-4">
               <label className="block text-gray-700 font-semibold mb-2">
-                {field.fieldName.charAt(0).toUpperCase() + field.fieldName.slice(1)}{" "}
+                {field.fieldName.charAt(0).toUpperCase() +
+                  field.fieldName.slice(1)}{" "}
                 {field.required && <span className="text-red-600">*</span>}
               </label>
 
-              {field.fieldType === "text" && (
+              {["text", "email", "number"].includes(field.fieldType) && (
                 <input
-                  type="text"
-                  name={field.fieldName}
-                  value={formData[field.fieldName] || ""}
-                  onChange={handleChange}
-                  required={field.required}
-                  className="border rounded px-4 py-2 w-full"
-                />
-              )}
-
-              {field.fieldType === "email" && (
-                <input
-                  type="email"
-                  name={field.fieldName}
-                  value={formData[field.fieldName] || ""}
-                  onChange={handleChange}
-                  required={field.required}
-                  className="border rounded px-4 py-2 w-full"
-                />
-              )}
-
-              {field.fieldType === "number" && (
-                <input
-                  type="number"
+                  type={field.fieldType}
                   name={field.fieldName}
                   value={formData[field.fieldName] || ""}
                   onChange={handleChange}
@@ -392,12 +429,17 @@ function RegistrationForm() {
               {field.fieldType === "checkbox" && (
                 <div className="flex flex-col gap-2">
                   {field.options.map((option, idx) => (
-                    <label key={idx} className="inline-flex items-center gap-2">
+                    <label
+                      key={idx}
+                      className="inline-flex items-center gap-2"
+                    >
                       <input
                         type="checkbox"
                         name={field.fieldName}
                         value={option}
-                        checked={formData[field.fieldName]?.includes(option) || false}
+                        checked={
+                          formData[field.fieldName]?.includes(option) || false
+                        }
                         onChange={handleChange}
                       />
                       <span>{option}</span>
@@ -408,12 +450,15 @@ function RegistrationForm() {
             </div>
           ))}
 
-          {/* Role selection */}
+          {/* Role Selection */}
           {roleField && (
-            <div className="mb-4">
+            <div className="mb-6">
               <label className="block text-gray-700 font-semibold mb-2">
-                {roleField.fieldName.charAt(0).toUpperCase() + roleField.fieldName.slice(1)}{" "}
-                {roleField.required && <span className="text-red-600">*</span>}
+                {roleField.fieldName.charAt(0).toUpperCase() +
+                  roleField.fieldName.slice(1)}{" "}
+                {roleField.required && (
+                  <span className="text-red-600">*</span>
+                )}
               </label>
               <div className="flex flex-col gap-3">
                 {roleField.options.map((option, idx) => {
@@ -422,14 +467,18 @@ function RegistrationForm() {
                   );
                   const price = matchingRole?.rolePrice || 0;
                   const remaining = Math.max(
-                    matchingRole?.maxRegistrations - (roleRegistrations[matchingRole?.roleName] || 0),
+                    matchingRole?.maxRegistrations -
+                    (roleRegistrations[matchingRole?.roleName] || 0),
                     0
                   );
 
                   return (
                     <label
                       key={idx}
-                      className="flex flex-col border rounded p-3 hover:shadow transition cursor-pointer"
+                      className={`flex flex-col border rounded p-3 transition cursor-pointer ${remaining <= 0
+                        ? "opacity-50 cursor-not-allowed bg-gray-100"
+                        : "hover:shadow-lg"
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         <input
@@ -443,19 +492,26 @@ function RegistrationForm() {
                         />
                         <span className="font-medium">{option}</span>
                         <span className="text-sm text-blue-600 font-semibold ml-auto">
-                          {price === 0 ? "FREE" : `₹${price.toLocaleString("en-IN")}`}
-                          <span className="text-red-800">*</span>
+                          {price === 0
+                            ? "FREE"
+                            : `₹${price.toLocaleString("en-IN")}`}
                         </span>
                       </div>
+
                       {matchingRole?.roleDescription && (
                         <ul className="text-gray-600 text-sm mt-1 ml-6 list-disc pl-5">
-                          {matchingRole.roleDescription.split(",").map((desc, index) => (
-                            <li key={index}>{desc.trim()}</li>
-                          ))}
+                          {matchingRole.roleDescription
+                            .split(",")
+                            .map((desc, index) => (
+                              <li key={index}>{desc.trim()}</li>
+                            ))}
                         </ul>
                       )}
+
                       {remaining <= 0 && (
-                        <span className="text-red-600 text-xs ml-2">(Sold Out)</span>
+                        <span className="text-red-600 text-xs font-bold mt-1">
+                          (Sold Out)
+                        </span>
                       )}
                     </label>
                   );
@@ -464,85 +520,101 @@ function RegistrationForm() {
             </div>
           )}
 
-          {/* Payment Button */}
-          {!paymentSuccess && formData[roleField?.fieldName] && (
-            <>
-              {selectedRole && (() => {
-                const rolePrice = parseFloat(selectedRole.rolePrice);
-                const feeRate = admin?.category === 'Entertainment Events / concerts' ? 0.05 : 0.025;
-                const rawPlatformFee = rolePrice * feeRate;
-                const platformFee = Math.round(rawPlatformFee * 100) / 100;
+          {/* Payment Section */}
+          {!paymentSuccess && formData[roleField?.fieldName] && selectedRole && (
+            (() => {
+              const rolePrice = parseFloat(selectedRole.rolePrice);
+              const feeRate =
+                admin?.category === "Entertainment Events / concerts"
+                  ? 0.05
+                  : 0.025;
+              const platformFee = Math.round(rolePrice * feeRate * 100) / 100;
+              const totalAmount = rolePrice + platformFee;
 
-
-                const totalAmount = rolePrice + platformFee;
-
-                return (
-                  <div className="mb-4 text-black font-medium space-y-1 text-md">
-                    <p className="flex justify-between">
-                      <span>Amount:</span>
-                      <span>{rolePrice === 0 ? "Free" : `₹${rolePrice.toFixed(2)}`}</span>
-                    </p>
-                    {rolePrice !== 0 && (
-                      <>
-                        <p className="flex justify-between text-[12px]">
-                          <span>
-                            Platform Fee (
-                            {admin?.category === "Entertainment Events / concerts" ? "5%" : "2.5%"}
-                            ):
-                          </span>
-                          <span>₹{platformFee.toFixed(2)}</span>
-                        </p>
-                        <hr className="my-1 border-blue-300" />
-                        <p className="flex justify-between font-semibold text-xl">
-                          <span>Total:</span>
-                          <span>₹{totalAmount.toFixed(2)}</span>
-                        </p>
-                      </>
-                    )}
-
-                    {rolePrice === 0 ? (
-                      <button
-                        type="button"
-                        className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
-                        onClick={handleFreeRegistration}
-                        disabled={isLoading}
-                      >
-                        {isLoading ? 'Registering...' : 'Register'}
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
-                        onClick={handlePayment}
-                        disabled={isLoading}
-                      >
-                        {isLoading ? 'Processing...' : `Pay ₹${totalAmount.toFixed(2)}`}
-                      </button>
-                    )}
-
-                    <div className="flex items-center justify-center space-x-2 mt-5">
-                      <ShieldCheck className="w-6 h-6 text-green-600" />
-                      <p className="text-[15px]">Safe & Secure Payment</p>
-                    </div>
+              return (
+                <div className="mb-4 text-black font-medium space-y-1 text-md">
+                  <div className="flex justify-between">
+                    <span>Amount:</span>
+                    <span>
+                      {rolePrice === 0
+                        ? "Free"
+                        : `₹${rolePrice.toFixed(2)}`}
+                    </span>
                   </div>
-                );
-              })()}
-            </>
+                  {rolePrice !== 0 && (
+                    <>
+                      <div className="flex justify-between text-[13px]">
+                        <span>
+                          Platform Fee ({feeRate * 100}%):
+                        </span>
+                        <span>₹{platformFee.toFixed(2)}</span>
+                      </div>
+                      <hr className="my-1 border-blue-300" />
+                      <div className="flex justify-between font-semibold text-lg">
+                        <span>Total:</span>
+                        <span>₹{totalAmount.toFixed(2)}</span>
+                      </div>
+                    </>
+                  )}
+
+                  {rolePrice === 0 ? (
+                    <button
+                      type="button"
+                      className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
+                      onClick={handleFreeRegistration}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Registering..." : "Register"}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="mt-4 px-4 py-2 rounded-lg w-full bg-red-600 text-white hover:bg-red-700"
+                      onClick={handlePayment}
+                      disabled={isLoading}
+                    >
+                      {isLoading
+                        ? "Processing..."
+                        : `Pay ₹${totalAmount.toFixed(2)}`}
+                    </button>
+                  )}
+
+                  <div className="flex items-center justify-center space-x-2 mt-5">
+                    <ShieldCheck className="w-6 h-6 text-green-600" />
+                    <p className="text-[15px]">Safe & Secure Payment</p>
+                  </div>
+                </div>
+              );
+            })()
           )}
 
+          {/* Branding */}
           <div className="mt-8 flex items-center justify-center gap-2">
             <span className="text-gray-600 text-sm mb-2">Powered by</span>
             <Link to="/">
-              <img src={logo} alt="Powered by logo" className="h-7 object-contain" />
+              <img
+                src={logo}
+                alt="Powered by logo"
+                className="h-7 object-contain"
+              />
             </Link>
           </div>
         </form>
+
         <div className="mt-4 text-center">
-          <Link to="https://www.aurelionfutureforge.com/" target="_blank" rel="noopener noreferrer">
-            <p className="text-purple-800 text-sm underline">An Aurelion Product</p>
+          <Link
+            to="https://www.aurelionfutureforge.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <p className="text-purple-800 text-sm underline">
+              An Aurelion Product
+            </p>
           </Link>
         </div>
       </div>
+      <br />
+
     </div>
   );
 }
