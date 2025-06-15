@@ -113,7 +113,7 @@ function SuccessPage() {
               Your Registration Details
             </h3>
             <p className="mt-8">
-              <strong>Name:</strong> {registeredUser.registrationData.NAME}
+              <strong>Name:</strong> {registeredUser.registrationData.NAME || "N/A"}
             </p>
             <p>
               <strong>Email:</strong> {registeredUser.registrationData.EMAIL}

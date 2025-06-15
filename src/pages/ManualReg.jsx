@@ -106,9 +106,20 @@ function ManualReg() {
       return;
     }
 
+    const requiredFields = event?.registrationFields?.filter(field => field.required);
+    for (const field of requiredFields) {
+      const value = formData[field.fieldName];
+
+
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        toast.error(`Please fill in the required field: ${field.fieldName}`);
+        return;
+      }
+    }
+
     const contactNumber = extractContact(formData).toString().replace(/\D/g, "");
 
-    if (!/^\d{10}$/.test(contactNumber)) {
+    if (contactNumber && !/^\d{10}$/.test(contactNumber)) {
       toast.error("Please enter a valid 10-digit contact number.");
       return;
     }
@@ -239,6 +250,16 @@ function ManualReg() {
   );
 
   const handleFreeRegistration = async () => {
+    const requiredFields = event?.registrationFields?.filter(field => field.required);
+    for (const field of requiredFields) {
+      const value = formData[field.fieldName];
+
+
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        toast.error(`Please fill in the required field: ${field.fieldName}`);
+        return;
+      }
+    }
     setIsLoading(true);
     try {
       console.log(formData);
@@ -516,11 +537,6 @@ function ManualReg() {
           </div>
 
         </form>
-        <div className="mt-4 text-center">
-          <Link to="https://www.aurelionfutureforge.com/" target="_blank" rel="noopener noreferrer">
-            <p className="text-purple-800 text-sm underline">An Aurelion Product</p>
-          </Link>
-        </div>
       </div>
     </div>
   );

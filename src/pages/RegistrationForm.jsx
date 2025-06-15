@@ -230,12 +230,23 @@ function RegistrationForm() {
       return;
     }
 
+    const requiredFields = event?.registrationFields?.filter(field => field.required);
+    for (const field of requiredFields) {
+      const value = formData[field.fieldName];
+
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        toast.error(`Please fill in the required field: ${field.fieldName}`);
+        return;
+      }
+    }
+
     const contactNumber = extractContact(formData).toString().replace(/\D/g, "");
 
-    if (!/^\d{10}$/.test(contactNumber)) {
+    if (contactNumber && !/^\d{10}$/.test(contactNumber)) {
       toast.error("Please enter a valid 10-digit contact number.");
       return;
     }
+
     setIsLoading(true);
     try {
       const checkRes = await axios.post(`${BASE_URL}/users/check-email`, {
@@ -281,6 +292,16 @@ function RegistrationForm() {
   };
 
   const handleFreeRegistration = async () => {
+    const requiredFields = event?.registrationFields?.filter(field => field.required);
+    for (const field of requiredFields) {
+      const value = formData[field.fieldName];
+
+      
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        toast.error(`Please fill in the required field: ${field.fieldName}`);
+        return;
+      }
+    }
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -315,14 +336,14 @@ function RegistrationForm() {
 
   return (
     <div className="bg-gray-100">
-      <div className="min-h-screen bg-gray-100 p-6 flex flex-col lg:flex-row relative">
+      <div className=" bg-gray-100 p-6 flex flex-col lg:flex-row relative">
         {/* 🖼️ Poster Card on Left */}
         {event.companyPoster && (
-          <div className="w-full lg:mr-[432px] bg-gray-100 shadow-lg rounded-xl p-4 mt-[-10px]">
+          <div className="w-full lg:mr-[432px] bg-gray-100 shadow-lg rounded-xl p-4 mt-[-10px] h-fit">
             <img
               src={event.companyPoster}
               alt="Company Poster"
-              className="w-full h-auto  object-cover rounded-md"
+              className="w-full h-full object-cover rounded-md"
             />
           </div>
         )}
@@ -387,7 +408,7 @@ function RegistrationForm() {
       </div>
 
 
-      <div className="bg-white p-6  shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full lg:w-[1042px] mt-2 ml-6 ">
+      <div className="bg-white p-6  shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full lg:w-[1042px] ml-6 ">
         <form className="w-full">
           {/* Custom Fields */}
           {otherFields.map((field, idx) => (
@@ -600,18 +621,6 @@ function RegistrationForm() {
             </Link>
           </div>
         </form>
-
-        <div className="mt-4 text-center">
-          <Link
-            to="https://www.aurelionfutureforge.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="text-purple-800 text-sm underline">
-              An Aurelion Product
-            </p>
-          </Link>
-        </div>
       </div>
       <br />
 
