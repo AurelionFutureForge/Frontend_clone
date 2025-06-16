@@ -4,11 +4,11 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/",
+  base: '/stagyn/', // 🔁 change from "/" to "/stagyn/"
   build: {
-    outDir: "dist",
+    outDir: 'dist',
   },
   server: {
-    historyApiFallback: true,
+    historyApiFallback: true, // Optional, applies if using Vite dev server
   },
 });
