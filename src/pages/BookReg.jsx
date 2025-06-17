@@ -63,7 +63,7 @@ const BookReg = () => {
         {/* Book Ticket Button */}
         <button
           onClick={() =>
-            window.location.href = `https://events.aurelionfutureforge.com/${EventName}/register/${eventID}`
+            window.location.href = `https://aurelionfutureforge.com/stagyn/${EventName}/register/${eventID}`
           }
           className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
         >
