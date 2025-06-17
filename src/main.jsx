@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 createRoot(document.getElementById('root')).render(
-    <BrowserRouter basename='/stagyn'>
+    <BrowserRouter>
       <Toaster />
       <App />
     </BrowserRouter>

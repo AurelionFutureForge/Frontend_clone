@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/stagyn/', // 🔁 change from "/" to "/stagyn/"
+  base: '/', // 🔁 change from "/" to "/stagyn/"
   build: {
     outDir: 'dist',
   },
