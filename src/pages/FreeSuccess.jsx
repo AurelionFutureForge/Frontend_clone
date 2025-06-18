@@ -154,7 +154,7 @@ function SuccessPage() {
 
         {/* Register Again Button */}
         <button
-          onClick={() => navigate("/manual-registration")}
+          onClick={() => navigate(`/${EventName}/register/${eventID}`)}
           className="mt-6 sm:mt-8 bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full flex items-center justify-center transition duration-300 w-full"
         >
           <FaHome className="mr-2" />
