@@ -121,10 +121,10 @@ function SuccessPage() {
         </div>
 
         {/* Event Info */}
-        <div className="text-gray-700 mb-6 sm:mb-8 text-sm sm:text-base">
-          <p className="flex items-center justify-center mt-2 text-center">
-            <FaClock className="mr-2 text-yellow-500" />
-            <span>
+       <div className="text-gray-700 mb-6 sm:mb-8 text-sm sm:text-base space-y-3">
+          <div className="flex justify-center sm:justify-start items-start gap-2 mb-1">
+            <FaClock className="text-yellow-500 w-5 h-5 mt-[2px] flex-shrink-0" />
+            <p className="text-left text-sm sm:text-base leading-snug m-0">
               <span className="font-semibold">Date:</span>{" "}
               {sameDate
                 ? new Date(event.startDate).toLocaleDateString()
@@ -132,12 +132,16 @@ function SuccessPage() {
                   event.endDate
                 ).toLocaleDateString()}`}{" "}
               | {event.time} (IST)
-            </span>
-          </p>
-          <p className="flex items-center justify-center mt-2">
-            <FaMapMarkerAlt className="mr-2 text-pink-500" />
-            <span className="text-center">{event.place}</span>
-          </p>
+            </p>
+          </div>
+
+          {/* Location Info */}
+          <div className="flex justify-center sm:justify-start items-start gap-2">
+            <FaMapMarkerAlt className="text-pink-500 w-5 h-5 mt-[2px] flex-shrink-0" />
+            <p className="text-left text-sm sm:text-base leading-snug m-0">
+              <span className="font-semibold">Location:</span> {event.place}
+            </p>
+          </div>
         </div>
 
         {/* Registered User Info */}
@@ -223,11 +227,6 @@ function SuccessPage() {
           <span className="text-gray-600 text-sm mb-2">Powered by</span>
           <Link to="/">
             <img src={logo} alt="Powered by logo" className="h-7 object-contain" />
-          </Link>
-        </div>
-        <div className="mt-4 text-center">
-          <Link to="https://www.aurelionfutureforge.com/" target="_blank" rel="noopener noreferrer">
-            <p className="text-purple-800 text-sm underline">An Aurelion Product</p>
           </Link>
         </div>
       </div>

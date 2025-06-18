@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 function ManageAccess() {
   const [privilegesList, setPrivilegesList] = useState([]);
@@ -9,6 +10,7 @@ function ManageAccess() {
   const [loading, setLoading] = useState(false); // To handle loading state
   const [prevLoading, setPrivLoading] = useState(false);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const companyName = localStorage.getItem("adminCompanyName");
@@ -35,7 +37,7 @@ function ManageAccess() {
           privilegeName: p,
           email: "",
           password: "",
-          endDate:""
+          endDate: ""
         }));
 
         setPrivilegesList(uniquePrivileges); // Set unique privileges to state
@@ -96,7 +98,7 @@ function ManageAccess() {
       setPrivLoading(false);
     }
   }
-  
+
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 flex items-center justify-center p-6">
@@ -114,13 +116,22 @@ function ManageAccess() {
                 onChange={(e) => handleInputChange(index, "email", e.target.value)}
                 className="border rounded px-3 py-2 w-full focus:ring-2 focus:ring-gray-400"
               />
-              <input
-                type="password"
-                placeholder="Enter Password"
-                value={priv.password}
-                onChange={(e) => handleInputChange(index, "password", e.target.value)}
-                className="border rounded px-3 py-2 w-full focus:ring-2 focus:ring-gray-400"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="Enter Password"
+                  value={priv.password}
+                  onChange={(e) => handleInputChange(index, "password", e.target.value)}
+                  className="border rounded px-3 py-2 w-full focus:ring-2 focus:ring-gray-400 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600"
+                >
+                  {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                </button>
+              </div>
               <input
                 type="date"
                 value={priv.endDate}

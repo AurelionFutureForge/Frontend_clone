@@ -61,7 +61,7 @@ function AdminDashboard() {
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-  const companyName = localStorage.getItem("adminCompanyName");
+  let companyName = localStorage.getItem("adminCompanyName");
   const selectedEvent = localStorage.getItem("selectedEvent");
   const EventName = localStorage.getItem("eventName");
   const [registrationFields, setRegistrationFields] = useState([]);
@@ -78,7 +78,10 @@ function AdminDashboard() {
           navigate("/admin/login");
           return;
         }
-
+        companyName = companyName
+          .replace(/\+/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
         const response = await axios.get(`${BASE_URL}/admin/users`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { companyName, eventId: selectedEvent, page: currentPage, limit: 10 },
@@ -273,7 +276,7 @@ function AdminDashboard() {
         </div>
         <nav className="flex flex-col gap-4 text-sm">
           <NavLink
-            to= {`/admin/dashboard/${selectedEvent}/${EventName}`}
+            to={`/admin/dashboard/${selectedEvent}/${EventName}`}
             className={({ isActive }) =>
               `w-full px-4 py-2 rounded flex items-center gap-2 transition-colors focus:outline-none ${isActive ? "bg-red-600 text-white" : "hover:bg-red-600 active:bg-red-600"
               }`

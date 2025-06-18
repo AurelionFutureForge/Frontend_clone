@@ -45,7 +45,7 @@ export default function EventCreation() {
         return;
       }
 
-      const companyName = localStorage.getItem('adminCompanyName');
+      let companyName = localStorage.getItem('adminCompanyName');
       if (!companyName) {
         toast.error('Company name not found. Please login again.');
         navigate('/event-login');
@@ -56,6 +56,10 @@ export default function EventCreation() {
       }
 
       try {
+        companyName = companyName
+          .replace(/\+/g, " ")         
+          .replace(/\s+/g, " ")        
+          .trim(); 
         const response = await axios.get(`${BASE_URL}/events/get-events?companyName=${encodeURIComponent(companyName)}`);
         setEvents(response.data);
       } catch (error) {

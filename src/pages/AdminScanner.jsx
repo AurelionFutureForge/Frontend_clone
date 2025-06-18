@@ -52,6 +52,28 @@ function AdminScanner() {
       }
     );
 
+    setTimeout(() => {
+    const permissionBtn = document.querySelector("#qr-reader button");
+    const scanLink = document.querySelector("#qr-reader__dashboard_section_csr span a");
+
+    if (permissionBtn) {
+      permissionBtn.style.backgroundColor = "#fff"; 
+      permissionBtn.style.color = "#2563eb";
+      permissionBtn.style.padding = "10px 16px";
+      permissionBtn.style.borderRadius = "6px";
+      permissionBtn.style.marginBottom = "1rem";
+      permissionBtn.style.fontWeight = "600";
+      permissionBtn.style.fontSize = "1rem";
+    }
+
+    if (scanLink) {
+      scanLink.style.color = "#2563eb";
+      scanLink.style.textDecoration = "underline";
+      scanLink.style.fontSize = "0.95rem";
+    }
+  }, 800);
+
+
     setScannerInstance(scanner);
   };
 
@@ -113,8 +135,7 @@ function AdminScanner() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
       <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">QR Code Scanner</h2>
-        <div id="qr-reader" className="w-full border rounded-md shadow-md p-4"></div>
-
+          <div id="qr-reader" className="w-full border rounded-md shadow-md p-4"></div>
         {verifiedUser && (
           <div className="mt-4 bg-gray-200 p-4 rounded-lg shadow-md">
             <div className="mt-2 bg-white p-3 rounded-md shadow">
