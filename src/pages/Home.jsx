@@ -310,7 +310,7 @@ function Home() {
               <h3 className="text-lg font-semibold mb-4">Registration Trends</h3>
               <div className="mt-10 flex flex-col items-center justify-center h-40 border-2 border-dashed border-gray-300 bg-gray-200 rounded">
                 <TrendingUp className="w-20 h-20 text-red-500" />
-                <p className="text-gray-500 mt-2">Interactive Chart Coming Soon</p>
+                <p className="text-gray-500 mt-2">Interactive Chart</p>
               </div>
             </div>
 
