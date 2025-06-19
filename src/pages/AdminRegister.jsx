@@ -34,7 +34,7 @@ function AdminRegister() {
       toast.success("Admin registered successfully!");
 
       // After successful registration, redirect to create-event page
-      navigate("/create-event");
+      navigate("/refer");
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
@@ -137,7 +137,7 @@ function AdminRegister() {
         <div className="mt-4 text-center">
           <p className="text-gray-600">
             Already registered?{" "}
-            <Link to="/event-login" className="text-red-500 hover:underline">
+            <Link to="/admin/login" className="text-red-500 hover:underline">
               Sign in
             </Link>
           </p>

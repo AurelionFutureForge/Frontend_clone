@@ -30,7 +30,7 @@ function AdminLogin() {
       toast.success("Login Successful!");
 
       // Redirect to the dashboard after login
-      navigate("/event-list");
+      navigate("/create-event");
 
     } catch (error) {
       // Handle invalid credentials
@@ -87,6 +87,12 @@ function AdminLogin() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+        <p
+          className="text-sm text-blue-600 mt-2 cursor-pointer hover:underline text-right"
+          onClick={() => navigate('/reset-password')}
+        >
+          Forgot password?
+        </p>
 
         <p className="text-gray-600 text-center mt-4 text-sm">
           Admin access only. Unauthorized users will be denied.

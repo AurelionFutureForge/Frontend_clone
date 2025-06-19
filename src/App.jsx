@@ -24,6 +24,7 @@ import ResetPasswordRequest from './pages/ResetPasswordRequest';
 import ResetPassword from './pages/ResetPassword'
 import FreeSuccess from './pages/FreeSuccess';
 import BookReg from './pages/BookReg';
+import Referal from './pages/Referal';
 
 const App = () => {
   return (
@@ -50,6 +51,7 @@ const App = () => {
         <Route path='/payment-success' element={<PaymentSuccess/>} />
         <Route path="/reset-password" element={<ResetPasswordRequest />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path='/refer' element={<ProtectedEventRoute><Referal /></ProtectedEventRoute>} />
         
       </Routes>
     </div>
