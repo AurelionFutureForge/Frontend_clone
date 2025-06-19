@@ -56,7 +56,7 @@ function EventList() {
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
     localStorage.removeItem("adminCompanyName");
-    window.location.href = "/";
+    navigate("/", { replace: true });
   };
 
   return (
