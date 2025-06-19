@@ -191,8 +191,8 @@ function AdminDashboard() {
   const uniqueRoles = [...new Set(users.map((u) => (u.registrationData?.role || u.registrationData.ROLE)).filter(Boolean))];
 
   const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    localStorage.removeItem("adminCompany");
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("adminCompanyName");
     toast.success("Logged out successfully!");
     navigate("/", { replace: true });
   };
@@ -451,7 +451,7 @@ function AdminDashboard() {
 
           {/* Users Table */}
           <div className="overflow-x-auto rounded-lg shadow border border-gray-200">
-            <table className="max-w-full divide-y divide-gray-200 text-sm 2xl:text-lg">
+            <table className="w-full divide-y divide-gray-200 text-sm 2xl:text-lg">
               {/* Table Head */}
               <thead className="bg-gray-900 text-white font-semibold">
                 <tr>
@@ -489,7 +489,7 @@ function AdminDashboard() {
                         {privileges.length > 0 ? (
                           <ul className="space-y-1 text-xs ">
                             {privileges.map((priv, idx) => (
-                              <li key={idx} className="flex gap-1 items-center">
+                              <li key={idx} className="flex gap-1 justify-center items-center">
                                 <span className="font-semibold">{priv.name?.toUpperCase()}</span> —
                                 {priv.claim ? (
                                   <span className="text-green-600 ml-1">Claimed</span>
