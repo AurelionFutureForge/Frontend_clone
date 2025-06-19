@@ -209,7 +209,7 @@ export default function EventCreation() {
     // Example: Clear token or session
     localStorage.removeItem("admin_token");
     localStorage.removeItem("adminCompanyName"); // or any auth info
-    window.location.href = "/"; // Redirect to home or login page
+    navigate("/", { replace: true }); 
   };
 
   const handleDescriptionChange = (e) => {

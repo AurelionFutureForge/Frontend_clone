@@ -194,7 +194,7 @@ function AdminDashboard() {
     localStorage.removeItem("adminToken");
     localStorage.removeItem("adminCompany");
     toast.success("Logged out successfully!");
-    navigate("/admin/login");
+    navigate("/", { replace: true });
   };
 
   const handlePagination = (page) => {

@@ -72,7 +72,7 @@ function AdminLogin() {
               disabled={loading}
             >
               <option value="admin">Admin</option>
-              <option value="privilege">Privilege</option>
+              <option value="privilege">Access</option>
             </select>
           </div>
 
