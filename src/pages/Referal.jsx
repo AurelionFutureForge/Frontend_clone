@@ -34,7 +34,7 @@ const Referal = () => {
             <div className="bg-white p-8 shadow-xl rounded-lg w-full max-w-md transform transition-all duration-300 hover:shadow-2xl">
                 <form onSubmit={handleRegister} className="space-y-5">
                     <div>
-                        <label className="block text-gray-700 font-medium">Referal Code (Optional)</label>
+                        <label className="block text-gray-700 font-medium">Refferal Code (if any)</label>
                         <input
                             type="text"
                             className="w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
