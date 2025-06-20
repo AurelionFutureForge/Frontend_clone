@@ -39,7 +39,7 @@ function EventList() {
         setEvents(Array.isArray(response.data) ? response.data : []);
         setLoading(false);
       } catch (error) {
-        toast.error("Failed to fetch events. Please try again.");
+        toast.error( error.response?.data?.message || "Failed to fetch events. Please try again.");
         setLoading(false);
       }
     };
