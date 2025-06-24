@@ -11,6 +11,7 @@ function ManageAccess() {
   const [prevLoading, setPrivLoading] = useState(false);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [getPrivileges, setGetPrivileges] = useState([]);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const companyName = localStorage.getItem("adminCompanyName");
@@ -49,6 +50,19 @@ function ManageAccess() {
 
     fetchPrivileges();
   }, [BASE_URL, eventId]);
+
+  useEffect(() => {
+    const getPrivilege = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/privilege/get-privileges/${eventId}`);
+        setGetPrivileges(response.data);
+      } catch (error) {
+        toast("Privileges Not yet Assigned !")
+      }
+    };
+    getPrivilege();
+  }, [BASE_URL, eventId]);
+  
 
   const handleInputChange = (index, field, value) => {
     const updated = [...assignedPrivileges];
@@ -101,7 +115,7 @@ function ManageAccess() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 flex flex-col items-center justify-center p-6">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-3xl">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Manage Access</h2>
 
@@ -118,7 +132,7 @@ function ManageAccess() {
               />
               <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"} 
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter Password"
                   value={priv.password}
                   onChange={(e) => handleInputChange(index, "password", e.target.value)}
@@ -132,12 +146,15 @@ function ManageAccess() {
                   {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
                 </button>
               </div>
+              <div className="flex flex-col">
+              <label className="font-medium text-gray-700 mb-2">Plan the expiry date for this access</label>
               <input
                 type="date"
                 value={priv.endDate}
                 onChange={(e) => handleInputChange(index, "endDate", e.target.value)}
                 className="border rounded px-3 py-2 w-full focus:ring-2 focus:ring-gray-400"
               />
+              </div>
 
             </div>
           </div>
@@ -146,24 +163,47 @@ function ManageAccess() {
         <div className="flex flex-col md:flex-row gap-4">
           <button
             onClick={handleSubmit}
-            className={`bg-gray-900 border border-gray-300 text-white px-6 py-2 rounded-4xl hover:bg-gray-800 transition w-full md:w-auto ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`bg-gray-900 border cursor-pointer border-gray-300 text-white px-6 py-2 rounded-4xl hover:bg-gray-800 transition w-full md:w-auto ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
             disabled={loading}
           >
             {loading ? "Assigning..." : "Assign Privileges"}
           </button>
-
+        </div>
+      </div>
+      {getPrivileges.length > 0 ? (
+      <div className="bg-white mt-8 p-6 rounded-xl shadow-md w-full max-w-3xl">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Assigned Privileges</h3>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 text-sm border border-black">
+            <thead className="bg-gray-100 text-gray-700">
+              <tr className="border border-black">
+                <th className="px-6 py-3 text-center font-semibold border border-black">Email</th>
+                <th className="px-6 py-3 text-center font-semibold border border-black">Privileges</th>
+                <th className="px-6 py-3 text-center font-semibold border border-black">Expiry Date</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200 ">
+              {getPrivileges.map((priv, idx) => (
+                <tr key={idx} className="border border-black">
+                  <td className="px-6 py-3 border border-black">{priv.email}</td>
+                  <td className="px-6 py-3 border border-black">{priv.privilegeName}</td>
+                  <td className="px-6 py-3 border border-black">{new Date(priv.endDate).toLocaleDateString() || "N/A"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <button
             onClick={handleDelete}
-            className={`bg-red-600 text-white px-6 py-2 rounded-4xl hover:bg-red-700 transition w-full md:w-auto ${prevLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`bg-red-600 mt-2 cursor-pointer text-white px-6 py-2 rounded-4xl hover:bg-red-700 transition  w-full md:w-auto ${prevLoading ? "opacity-50 cursor-not-allowed" : ""}`}
             disabled={prevLoading}
           >
             {prevLoading ? "Deleting" : "Delete Assigned Privileges"}
           </button>
         </div>
-
-
       </div>
+      ) : " " }
     </div>
+
   );
 }
 

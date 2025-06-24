@@ -1,93 +1,70 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { Html5Qrcode } from "html5-qrcode";
+import { QrCode } from "lucide-react";
 
 function AdminScanner() {
   const location = useLocation();
-  const [scannerInstance, setScannerInstance] = useState(null);
   const [scanResult, setScanResult] = useState(null);
   const [verifiedUser, setVerifiedUser] = useState(null);
+  const [scanFailed, setScanFailed] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
   const [lastScanned, setLastScanned] = useState({ text: "", timestamp: 0 });
 
+  const html5QrCodeRef = useRef(null);
   const isProcessingRef = useRef(false);
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const startScanner = () => {
-    const scannerElement = document.getElementById("qr-reader");
-    if (!scannerElement) return;
+    const qrRegionId = "qr-reader";
+    const config = { fps: 10, qrbox: { width: 300, height: 300 } };
 
-    scannerElement.innerHTML = "";
+    const qrCodeSuccessCallback = async (decodedText) => {
+      const now = Date.now();
+      if (isProcessingRef.current) return;
+      isProcessingRef.current = true;
 
-    const scanner = new Html5QrcodeScanner("qr-reader", {
-      fps: 10,
-      qrbox: { width: 300, height: 300 },
-    });
-
-    scanner.render(
-      async (decodedText) => {
-        const now = Date.now();
-
-        if (isProcessingRef.current) return;
-        isProcessingRef.current = true;
-
-        if (decodedText === lastScanned.text && now - lastScanned.timestamp < 3000) {
-          console.log("Duplicate scan ignored:", decodedText);
-          isProcessingRef.current = false;
-          return;
-        }
-
-        console.log("Scanned QR Code:", decodedText);
-        setLastScanned({ text: decodedText, timestamp: now });
-        setScanResult(decodedText);
-
-        await scanner.clear();
-        await verifyQRCode(decodedText);
-
+      if (decodedText === lastScanned.text && now - lastScanned.timestamp < 3000) {
         isProcessingRef.current = false;
-      },
-      (error) => {
-        if (error.name !== "NotFoundException") console.error("QR Scanner error:", error);
+        return;
       }
-    );
 
-    setTimeout(() => {
-    const permissionBtn = document.querySelector("#qr-reader button");
-    const scanLink = document.querySelector("#qr-reader__dashboard_section_csr span a");
+      setLastScanned({ text: decodedText, timestamp: now });
+      setScanResult(decodedText);
 
-    if (permissionBtn) {
-      permissionBtn.style.backgroundColor = "#fff"; 
-      permissionBtn.style.color = "#2563eb";
-      permissionBtn.style.padding = "10px 16px";
-      permissionBtn.style.borderRadius = "6px";
-      permissionBtn.style.marginBottom = "1rem";
-      permissionBtn.style.fontWeight = "600";
-      permissionBtn.style.fontSize = "1rem";
+      await stopScanner();
+      await verifyQRCode(decodedText);
+      isProcessingRef.current = false;
+    };
+
+    html5QrCodeRef.current = new Html5Qrcode(qrRegionId);
+    html5QrCodeRef.current
+      .start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+      .catch((err) => {
+        console.error("Failed to start QR scanner:", err);
+        toast.error("Failed to start QR scanner");
+      });
+  };
+
+  const stopScanner = async () => {
+    if (html5QrCodeRef.current?.isScanning) {
+      try {
+        await html5QrCodeRef.current.stop();
+        await html5QrCodeRef.current.clear();
+      } catch (err) {
+        console.error("Failed to stop QR scanner:", err);
+      }
     }
-
-    if (scanLink) {
-      scanLink.style.color = "#2563eb";
-      scanLink.style.textDecoration = "underline";
-      scanLink.style.fontSize = "0.95rem";
-    }
-  }, 800);
-
-
-    setScannerInstance(scanner);
+    setShowScanner(false);
   };
 
   useEffect(() => {
-    if (location.pathname === "/admin/scanner") {
-      startScanner();
-    }
-
     return () => {
-      if (scannerInstance) {
-        scannerInstance.clear().catch((err) => console.error("Scanner cleanup failed:", err));
-      }
+      stopScanner();
     };
-  }, [location.pathname]);
+  }, []);
 
   const verifyQRCode = async (qrCode) => {
     try {
@@ -98,6 +75,7 @@ function AdminScanner() {
 
       if (!token || !privilegeName) {
         toast.error("Missing privilege credentials. Please log in again.");
+        setScanFailed(true);
         return;
       }
 
@@ -113,32 +91,63 @@ function AdminScanner() {
 
       if (response.data.status === "success") {
         setVerifiedUser(response.data.user);
+        setScanFailed(false);
         toast.success(response.data.message);
       } else {
+        setVerifiedUser(null);
+        setScanFailed(true);
         toast.error(response.data.message);
       }
-    } catch (error) {
-      console.error("Verification error:", error);
-      toast.error("Invalid QR Code or already claimed!");
+    } catch (err) {
+      console.error("Verification error:", err);
+      toast.error(  err?.response?.data?.message || "Invalid QR Code or already claimed!");
+      setVerifiedUser(null);
+      setScanFailed(true);
     }
   };
 
   const handleScanNext = () => {
     setScanResult(null);
     setVerifiedUser(null);
+    setScanFailed(false);
     setLastScanned({ text: "", timestamp: 0 });
     isProcessingRef.current = false;
-    startScanner();
+    setShowScanner(true);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 rounded-xl">
       <div className="bg-white p-6 shadow-lg rounded-lg w-full max-w-md text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">QR Code Scanner</h2>
-          <div id="qr-reader" className="w-full border rounded-md shadow-md p-4"></div>
+
+        <div className="relative w-full min-h-[200px]">
+          {showScanner && (
+            <div
+              id="qr-reader"
+              className="w-full"
+              ref={(el) => {
+                if (el && !html5QrCodeRef.current?.isScanning) {
+                  startScanner();
+                }
+              }}
+            />
+          )}
+
+          {!verifiedUser && !scanFailed && !showScanner && (
+            <button
+              onClick={handleScanNext}
+              className="absolute left-1/2 bottom-[62px] transform -translate-x-1/2 bg-white text-black border border-black cursor-pointer rounded-full p-4 shadow-lg hover:bg-blue-50 transition"
+              title="Start Scanner"
+            >
+              <QrCode className="w-12 h-12" />
+            </button>
+          )}
+        </div>
+
+        {/* ✅ Success */}
         {verifiedUser && (
-          <div className="mt-4 bg-gray-200 p-4 rounded-lg shadow-md">
-            <div className="mt-2 bg-white p-3 rounded-md shadow">
+          <div className="bg-gray-200 p-4 rounded-lg shadow-md">
+            <div className="bg-white p-3 rounded-md shadow">
               <h3 className="text-lg font-bold">
                 {verifiedUser.name} ({verifiedUser.role})
               </h3>
@@ -147,11 +156,24 @@ function AdminScanner() {
               </div>
               <button
                 onClick={handleScanNext}
-                className="mt-4 w-full px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white shadow"
+                className="mt-4 w-full px-4 py-2 rounded bg-blue-500 cursor-pointer hover:bg-blue-600 text-white shadow"
               >
                 Scan Next QR
               </button>
             </div>
+          </div>
+        )}
+
+        
+        {scanFailed && !verifiedUser && (
+          <div className="bg-red-100 p-4 rounded-lg shadow-md">
+            <p className="text-red-700 font-semibold">Invalid QR Code!</p>
+            <button
+              onClick={handleScanNext}
+              className="mt-3 w-full px-4 py-2 rounded cursor-pointer bg-red-500 hover:bg-red-600 text-white shadow"
+            >
+              Scan Next QR
+            </button>
           </div>
         )}
       </div>

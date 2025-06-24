@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import logo from '../assets/stagyn_black.png'
 
 // Utility to dynamically extract name + email from registrationData
 function extractNameAndEmail(registrationData) {
@@ -86,83 +87,102 @@ function PrivilegeDashboard() {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-center w-full leading-tight">
-          <div>{companyName} — {eventName}</div>
-          <div className="text-blue-600">Privilege: {privilegeName}</div>
-        </h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition ml-4"
-        >
-          Logout
-        </button>
-      </div>
+    <>
+      <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-10">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
+          <div className="text-center md:text-left w-full">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+              {companyName} — {eventName}
+            </h1>
+            <p className="text-lg text-gray-700 mt-1 font-medium">
+              Privilege: <span className="text-black font-semibold">{privilegeName.toUpperCase()}</span>
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition text-sm font-medium shadow-md"
+          >
+            Logout
+          </button>
+        </div>
 
-      <button
-        onClick={handleScanQR}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition mb-4"
-      >
-        Scan QR to Claim {privilegeName}
-      </button>
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={handleScanQR}
+            className="bg-red-600 text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-red-700 transition font-medium shadow-md"
+          >
+            Scan QR to Claim <span className="font-semibold">{privilegeName}</span>
+          </button>
+        </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded shadow">
-          <thead>
-            <tr className="bg-blue-600 text-white">
-              <th className="py-2 px-3">Name</th>
-              <th className="py-2 px-3">Email</th>
-              <th className="py-2 px-3">Contact</th>
-              <th className="py-2 px-3">Role</th>
-              <th className="py-2 px-3">Claim Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
+        <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
+          <table className="min-w-full divide-y divide-gray-200 text-sm text-gray-800">
+            <thead className="bg-gray-800 text-white">
               <tr>
-                <td colSpan="5" className="text-center py-4 text-gray-500">
-                  Loading...
-                </td>
+                <th className="px-4 py-3 text-left font-semibold">Name</th>
+                <th className="px-4 py-3 text-left font-semibold">Email</th>
+                <th className="px-4 py-3 text-left font-semibold">Contact</th>
+                <th className="px-4 py-3 text-left font-semibold">Role</th>
+                <th className="px-4 py-3 text-left font-semibold">Claim Status</th>
               </tr>
-            ) : users.length > 0 ? (
-              users.map((user) => {
-                const privilege = user.privileges.find(
-                  (p) => p.name === privilegeName
-                );
-                const isClaimed = privilege?.claim === true;
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {loading ? (
+                <tr>
+                  <td colSpan="5" className="text-center py-6 text-gray-500">
+                    Loading...
+                  </td>
+                </tr>
+              ) : users.length > 0 ? (
+                users.map((user) => {
+                  const privilege = user.privileges.find(
+                    (p) => p.name === privilegeName
+                  );
+                  const isClaimed = privilege?.claim === true;
 
-                const registration = user.registrationData;
-                const { name, email } = extractNameAndEmail(registration);
-                const contact = extractContact(registration);
+                  const registration = user.registrationData;
+                  const { name, email } = extractNameAndEmail(registration);
+                  const contact = extractContact(registration);
 
-                return (
-                  <tr key={user._id} className="border-t">
-                    <td className="py-2 px-3">{name}</td>
-                    <td className="py-2 px-3">{email}</td>
-                    <td className="py-2 px-3">{contact}</td>
-                    <td className="py-2 px-3">{user.role}</td>
-                    <td className="py-2 px-3">
-                      {isClaimed ? (
-                        <span className="text-green-600 font-semibold">Claimed</span>
-                      ) : (
-                        <span className="text-red-600 font-semibold">Not Claimed</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan="5" className="text-center py-4 text-gray-500">
-                  No users found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                  return (
+                    <tr key={user._id}>
+                      <td className="px-4 py-3">{name}</td>
+                      <td className="px-4 py-3">{email}</td>
+                      <td className="px-4 py-3">{contact}</td>
+                      <td className="px-4 py-3 capitalize">{user.role}</td>
+                      <td className="px-4 py-3">
+                        {isClaimed ? (
+                          <span className="text-green-600 font-semibold">Claimed</span>
+                        ) : (
+                          <span className="text-red-600 font-semibold">Not Claimed</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center py-6 text-gray-500">
+                    No users found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+      <div className="flex items-center justify-center gap-2 mt-[-70px]">
+        <span className="text-gray-600 text-sm ">Powered by</span>
+        <Link to="/">
+          <img
+            src={logo}
+            alt="Powered by logo"
+            className="h-7 object-contain"
+          />
+        </Link>
+      </div>
+    </>
+
   );
 }
 

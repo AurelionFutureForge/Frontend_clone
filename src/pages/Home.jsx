@@ -189,6 +189,11 @@ function Home() {
               Create Your First Event
             </Link>
           </div>
+          <div className="mt-8 space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
+            <Link to="https://cal.com/stagyn/30min?overlayCalendar=true" className="px-12 py-3 bg-red-700 text-white font-semibold rounded-lg shadow hover:bg-red-800 transition">
+             Schedule Demo
+            </Link>
+          </div>
 
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 md:px-20">
 
