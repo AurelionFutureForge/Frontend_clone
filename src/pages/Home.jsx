@@ -283,7 +283,7 @@ function Home() {
               <h3 className="text-md font-semibold text-left">Revenue</h3>
               <DollarSign className="w-5 h-5 text-red-500" />
             </div>
-            <p className="text-black font-bold text-left mt-4 text-3xl">$127,350</p>
+            <p className="text-black font-bold text-left mt-4 text-3xl">&#8377; 127,350</p>
             <div className="flex items-center space-x-1">
               <ArrowUpRight className="w-4 h-4 text-green-600 mt-1" />
               <span className="text-green-600 text-[12px] mt-1">+18% from last month</span>
