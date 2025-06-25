@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Calendar, BarChart3, Banknote, CalendarClock, Users, ArrowUpRight, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X } from 'lucide-react';
+import { Calendar, BarChart3, Banknote, CalendarClock, Users, ArrowUpRight, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X, IndianRupee } from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 import logo from '../assets/stagyn_black.png'
 import logo2 from '../assets/stagyn_title.png'
@@ -281,7 +281,7 @@ function Home() {
           <div className="bg-white p-6 rounded-xl shadow-md text-gray-700 font-normal hover:shadow-black hover:-translate-y-2 transition duration-300 w-[260px]">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-md font-semibold text-left">Revenue</h3>
-              <DollarSign className="w-5 h-5 text-red-500" />
+              <IndianRupee className="w-5 h-5 text-red-500" />
             </div>
             <p className="text-black font-bold text-left mt-4 text-3xl">&#8377; 127,350</p>
             <div className="flex items-center space-x-1">
