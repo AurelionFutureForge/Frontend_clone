@@ -12,6 +12,7 @@ function ManageAccess() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [getPrivileges, setGetPrivileges] = useState([]);
+  const [privilegesLoading, setPrivilegesLoading] = useState(true);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const companyName = localStorage.getItem("adminCompanyName");
@@ -51,18 +52,21 @@ function ManageAccess() {
     fetchPrivileges();
   }, [BASE_URL, eventId]);
 
+  const getPrivilege = async () => {
+    try {
+      setPrivilegesLoading(true);
+      const response = await axios.get(`${BASE_URL}/privilege/get-privileges/${eventId}`);
+      setGetPrivileges(response.data);
+    } catch (error) {
+      setGetPrivileges([]);
+    } finally {
+      setPrivilegesLoading(false);
+    }
+  };
   useEffect(() => {
-    const getPrivilege = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/privilege/get-privileges/${eventId}`);
-        setGetPrivileges(response.data);
-      } catch (error) {
-        toast("Privileges Not yet Assigned !")
-      }
-    };
     getPrivilege();
   }, [BASE_URL, eventId]);
-  
+
 
   const handleInputChange = (index, field, value) => {
     const updated = [...assignedPrivileges];
@@ -99,6 +103,25 @@ function ManageAccess() {
     }
   };
 
+  const handleDeletePrivilege = async (priv) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/privilege/delete-privilege`, {
+        data: {
+          eventId,
+          priv
+        }
+      });
+      toast.success(response.data.message);
+      setGetPrivileges(prev =>
+        prev.filter(p => !(p.email === priv.email && p.privilegeName === priv.privilegeName))
+      );
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error(error.response?.data?.message || "Failed to delete privilege");
+    }
+  };
+
+
   const handleDelete = async () => {
     try {
       setPrivLoading(true);
@@ -106,6 +129,7 @@ function ManageAccess() {
       const eventId = rawEventId?.startsWith(":") ? rawEventId.slice(1) : rawEventId;
       await axios.delete(`${BASE_URL}/admin/delete-privileges/${eventId}`);
       toast.success("Privileges Deleted Successfully");
+      await getPrivilege();
     } catch (error) {
       toast.error("Failed to delete the Privileges");
     } finally {
@@ -147,13 +171,13 @@ function ManageAccess() {
                 </button>
               </div>
               <div className="flex flex-col">
-              <label className="font-medium text-gray-700 mb-2">Plan the expiry date for this access</label>
-              <input
-                type="date"
-                value={priv.endDate}
-                onChange={(e) => handleInputChange(index, "endDate", e.target.value)}
-                className="border rounded px-3 py-2 w-full focus:ring-2 focus:ring-gray-400"
-              />
+                <label className="font-medium text-gray-700 mb-2">Plan the expiry date for this access</label>
+                <input
+                  type="date"
+                  value={priv.endDate}
+                  onChange={(e) => handleInputChange(index, "endDate", e.target.value)}
+                  className="border rounded px-3 py-2 w-full focus:ring-2 focus:ring-gray-400"
+                />
               </div>
 
             </div>
@@ -171,37 +195,49 @@ function ManageAccess() {
         </div>
       </div>
       {getPrivileges.length > 0 ? (
-      <div className="bg-white mt-8 p-6 rounded-xl shadow-md w-full max-w-3xl">
-        <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Assigned Privileges</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 text-sm border border-black">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr className="border border-black">
-                <th className="px-6 py-3 text-center font-semibold border border-black">Email</th>
-                <th className="px-6 py-3 text-center font-semibold border border-black">Privileges</th>
-                <th className="px-6 py-3 text-center font-semibold border border-black">Expiry Date</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200 ">
-              {getPrivileges.map((priv, idx) => (
-                <tr key={idx} className="border border-black">
-                  <td className="px-6 py-3 border border-black">{priv.email}</td>
-                  <td className="px-6 py-3 border border-black">{priv.privilegeName}</td>
-                  <td className="px-6 py-3 border border-black">{new Date(priv.endDate).toLocaleDateString() || "N/A"}</td>
+        <div className="bg-white mt-8 p-6 rounded-xl shadow-md w-full max-w-3xl">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Assigned Privileges</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200 text-sm border border-black">
+              <thead className="bg-gray-100 text-gray-700">
+                <tr className="border border-black">
+                  <th className="px-6 py-3 text-center font-semibold border border-black">Email</th>
+                  <th className="px-6 py-3 text-center font-semibold border border-black">Privileges</th>
+                  <th className="px-6 py-3 text-center font-semibold border border-black">Expiry Date</th>
+                  <th className="px-6 py-3 text-center font-semibold border border-black">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <button
-            onClick={handleDelete}
-            className={`bg-red-600 mt-2 cursor-pointer text-white px-6 py-2 rounded-4xl hover:bg-red-700 transition  w-full md:w-auto ${prevLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={prevLoading}
-          >
-            {prevLoading ? "Deleting" : "Delete Assigned Privileges"}
-          </button>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {getPrivileges.map((priv, idx) => (
+                  <tr key={idx} className="border border-black">
+                    <td className="px-6 py-3 border border-black">{priv.email}</td>
+                    <td className="px-6 py-3 border border-black">{priv.privilegeName}</td>
+                    <td className="px-6 py-3 border border-black">
+                      {priv.endDate ? new Date(priv.endDate).toLocaleDateString() : "N/A"}
+                    </td>
+                    <td className="px-6 py-3 border border-black text-center">
+                      <button
+                        onClick={() => handleDeletePrivilege(priv)}
+                        className="bg-red-600 text-white px-3 py-1 cursor-pointer rounded hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <button
+              onClick={handleDelete}
+              className={`bg-red-600 mt-2 cursor-pointer text-white px-6 py-2 rounded-4xl hover:bg-red-700 transition  w-full md:w-auto ${prevLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={prevLoading}
+            >
+              {prevLoading ? "Deleting" : "Delete All Assigned Privileges"}
+            </button>
+          </div>
         </div>
-      </div>
-      ) : " " }
+      ) : " "}
     </div>
 
   );

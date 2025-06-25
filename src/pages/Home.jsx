@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Calendar, BarChart3, Banknote,  CalendarClock, Users, ArrowUpRight, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X } from 'lucide-react';
+import { Calendar, BarChart3, Banknote, CalendarClock, Users, ArrowUpRight, Zap, Twitter, Linkedin, Github, TrendingUp, DollarSign, UserPlus, CalendarDays, CheckCircle, Clock, Star, X } from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 import logo from '../assets/stagyn_black.png'
 import logo2 from '../assets/stagyn_title.png'
@@ -111,6 +111,10 @@ function Home() {
                 <Users className="w-5 h-5" />
                 <span>Attendees</span>
               </Link>
+              <Link to="https://cal.com/stagyn/30min?overlayCalendar=true" className="flex items-center space-x-2 hover:text-gray-700">
+                <CalendarClock className="w-5 h-5" />
+                <span>Shedule Demo</span>
+              </Link>
             </div>
           </div>
 
@@ -193,11 +197,7 @@ function Home() {
               Create Your First Event
             </Link>
           </div>
-          <div className="mt-8 space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
-            <Link to="https://cal.com/stagyn/30min?overlayCalendar=true" className="px-12 py-3 bg-red-700 text-white font-semibold rounded-lg shadow hover:bg-red-800 transition">
-              Schedule Demo
-            </Link>
-          </div>
+
 
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 md:px-20">
 
@@ -349,11 +349,18 @@ function Home() {
             </div>
           </div>
         </div>
-
-        <div className="text-center mt-6">
-          <button className="bg-black text-white px-6 py-2 rounded hover:bg-gray-800">
-            View Full Dashboard
-          </button>
+        <div className="flex items-center justify-center bg-white">
+          <div className="text-center flex flex-col max-w-lg gap-4">
+            <button className="bg-black text-white px-6 py-2 rounded hover:bg-gray-800">
+              View Full Dashboard
+            </button>
+            <a
+              href="https://cal.com/stagyn/30min?overlayCalendar=true"
+              className="px-6 py-2 bg-gray-300 text-black font-semibold rounded-lg shadow hover:bg-gray-400 transition"
+            >
+              Schedule Demo
+            </a>
+          </div>
         </div>
       </main>
 
