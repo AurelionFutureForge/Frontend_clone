@@ -189,8 +189,9 @@ function RegistrationForm() {
         <p className="text-xl text-gray-300">No event found.</p>
       </div>
     );
-
-  if (!formVisible)
+  const today = new Date();
+  const isFormExpired = event.startDate && today > new Date(event.startDate);
+  if (!formVisible || isFormExpired)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 px-4">
         <div className="bg-white rounded-2xl p-10 shadow-2xl max-w-lg w-full text-center space-y-5">
@@ -335,83 +336,83 @@ function RegistrationForm() {
 
 
   return (
-<div className="bg-gray-100 overflow-x-hidden">
-  <div className="bg-gray-100 p-6 flex flex-col lg:flex-row relative">
-    
-    {/* 🖼️ Poster Card on Left */}
-    {event.companyPoster && (
-      <div className="w-full lg:mr-[432px] bg-gray-100 shadow-lg rounded-xl p-4 mt-2 h-fit">
-        <img
-          src={event.companyPoster}
-          alt="Company Poster"
-          className="w-full h-full object-cover rounded-md"
-        />
-      </div>
-    )}
+    <div className="bg-gray-100 overflow-x-hidden">
+      <div className="bg-gray-100 p-6 flex flex-col lg:flex-row relative">
 
-    {/* 📝 Registration Content */}
-    <div
-      className="w-full max-w-md mx-auto lg:w-[400px] bg-white p-4 shadow-lg overflow-y-auto flex flex-col 
+        {/* 🖼️ Poster Card on Left */}
+        {event.companyPoster && (
+          <div className="w-full lg:mr-[432px] bg-gray-100 shadow-lg rounded-xl p-4 mt-2 h-fit">
+            <img
+              src={event.companyPoster}
+              alt="Company Poster"
+              className="w-full h-full object-cover rounded-md"
+            />
+          </div>
+        )}
+
+        {/* 📝 Registration Content */}
+        <div
+          className="w-full max-w-md mx-auto lg:w-[400px] bg-white p-4 shadow-lg overflow-y-auto flex flex-col 
       lg:mt-0 mt-6 border border-gray-400 rounded-xl
       lg:fixed lg:right-4 lg:top-4 lg:h-[90vh]"
-    >
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-black mb-4 text-center lg:text-left">
-        {event.eventName}
-      </h2>
+        >
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-black mb-4 text-center lg:text-left">
+            {event.eventName}
+          </h2>
 
-      <div className="flex flex-col gap-4 text-sm sm:text-base text-gray-600 mb-6 mt-4">
-        {event.startDate && (
-          <p className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-purple-500" />
-            <span className="font-semibold">Date:</span>{" "}
-            {event.endDate &&
-            new Date(event.startDate).toDateString() !==
-              new Date(event.endDate).toDateString()
-              ? `${new Date(event.startDate).toLocaleDateString()} - ${new Date(
-                  event.endDate
-                ).toLocaleDateString()}`
-              : new Date(event.startDate).toLocaleDateString()}
-          </p>
-        )}
+          <div className="flex flex-col gap-4 text-sm sm:text-base text-gray-600 mb-6 mt-4">
+            {event.startDate && (
+              <p className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-purple-500" />
+                <span className="font-semibold">Date:</span>{" "}
+                {event.endDate &&
+                  new Date(event.startDate).toDateString() !==
+                  new Date(event.endDate).toDateString()
+                  ? `${new Date(event.startDate).toLocaleDateString()} - ${new Date(
+                    event.endDate
+                  ).toLocaleDateString()}`
+                  : new Date(event.startDate).toLocaleDateString()}
+              </p>
+            )}
 
-        {event.time && (
-          <p className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-orange-500" />
-            <span className="font-semibold">Time:</span> {event.time}
-          </p>
-        )}
+            {event.time && (
+              <p className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-orange-500" />
+                <span className="font-semibold">Time:</span> {event.time}
+              </p>
+            )}
 
-        {event.place && (
-          <div className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-blue-500" />
-            <span className="font-semibold">Location:</span>
-            <span>{event.place}</span>
+            {event.place && (
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-blue-500" />
+                <span className="font-semibold">Location:</span>
+                <span>{event.place}</span>
+              </div>
+            )}
+
+            {countdown && (
+              <div className="flex flex-col items-start gap-1 text-gray-600 font-semibold">
+                <div className="flex items-center gap-2">
+                  <Timer className="w-5 h-5" />
+                  <span>Event Starts In:</span>
+                </div>
+                <div className="ml-6 mt-2 text-xl text-black font-semibold">
+                  {countdown}
+                </div>
+              </div>
+            )}
           </div>
-        )}
 
-        {countdown && (
-          <div className="flex flex-col items-start gap-1 text-gray-600 font-semibold">
-            <div className="flex items-center gap-2">
-              <Timer className="w-5 h-5" />
-              <span>Event Starts In:</span>
-            </div>
-            <div className="ml-6 mt-2 text-xl text-black font-semibold">
-              {countdown}
-            </div>
+          <div className="pt-4 border-t border-gray-300 space-y-2">
+            <p className="text-gray-600 font-semibold">Hosted By</p>
+            <p className="text-black text-lg">{event.companyName}</p>
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="pt-4 border-t border-gray-300 space-y-2">
-        <p className="text-gray-600 font-semibold">Hosted By</p>
-        <p className="text-black text-lg">{event.companyName}</p>
-      </div>
-    </div>
-  </div>
 
 
-
-<div className="bg-white p-4 sm:p-6 shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full 
+      <div className="bg-white p-4 sm:p-6 shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full 
   max-w-full lg:w-[550px] xl:w-[960px] lg:ml-6 mx-auto">
         <form className="w-full">
           {/* Custom Fields */}

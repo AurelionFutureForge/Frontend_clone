@@ -15,7 +15,8 @@ export default function EditEvent() {
     endDate: '',
     time: '',
     eventRoles: [],
-    eventDescription: ''
+    eventDescription: '',
+    companyPoster:''
   });
 
   const [posterFile, setPosterFile] = useState(null);
@@ -50,7 +51,8 @@ export default function EditEvent() {
           endDate: event.endDate,
           time: event.time,
           eventRoles: rolesWithPrivilegesString,
-          eventDescription: event.eventDescription
+          eventDescription: event.eventDescription,
+          companyPoster: event.companyPoster
         });
       } catch (err) {
         console.error(err);
@@ -214,7 +216,7 @@ export default function EditEvent() {
 
         <input type="date" name="startDate"
           className="w-full p-3 mb-4 border rounded"
-          value={sDate} onChange={handleChange} min={new Date().toISOString().split("T")[0]}  />
+          value={sDate} onChange={handleChange} min={new Date().toISOString().split("T")[0]} />
 
         {eventDetails.endDate && (
           <input
@@ -223,7 +225,7 @@ export default function EditEvent() {
             className="w-full p-3 mb-4 border rounded"
             value={eDate}
             onChange={handleChange}
-            min={new Date().toISOString().split("T")[0]} 
+            min={new Date().toISOString().split("T")[0]}
           />
         )}
 
@@ -237,6 +239,7 @@ export default function EditEvent() {
         />
 
         {/* Poster Upload */}
+        <label className='font-semibold mb-2'>Event Banner</label>
         <input
           type="file"
           accept="image/*"
@@ -244,6 +247,18 @@ export default function EditEvent() {
           onChange={(e) => setPosterFile(e.target.files[0])}
         />
 
+        {eventDetails.companyPoster && (
+          <div className="mb-4">
+            <p className="text-sm text-gray-600 mb-1">Current Poster:</p>
+            <img
+              src={eventDetails.companyPoster}
+              alt="Event Poster"
+              className="w-full max-w-sm rounded-lg shadow-md"
+            />
+          </div>
+        )}
+
+        <label className='font-semibold mb-2'>About the Event</label>
         <textarea
           name="event-description"
           placeholder="Write about the event..! (Max 100 words)"
@@ -289,7 +304,7 @@ export default function EditEvent() {
 
           <button
             onClick={handleAddRole}
-            className="w-full py-2 bg-red-600 text-white rounded-4xl hover:bg-red-700"
+            className="w-full py-2 bg-red-600 text-white rounded-4xl hover:bg-red-700 cursor-pointer"
           >{editIndex !== null ? 'Update Ticket' : 'Add Ticket'}</button>
 
           <div className="mt-4 space-y-2">
@@ -304,13 +319,13 @@ export default function EditEvent() {
                 <div className="flex flex-col items-end space-y-16 ml-2">
                   <button
                     onClick={() => handleEditRole(index)}
-                    className="text-blue-600 hover:text-blue-800 text-sm"
+                    className="text-blue-600 hover:text-blue-800 text-sm cursor-pointer"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteRole(index)}
-                    className="text-red-600 hover:text-red-800 text-sm"
+                    className="text-red-600 hover:text-red-800 text-sm cursor-pointer"
                   >
                     ✕
                   </button>
@@ -325,7 +340,7 @@ export default function EditEvent() {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full py-3 bg-red-600 text-white rounded-4xl hover:bg-red-700 disabled:opacity-50"
+          className="w-full py-3 bg-red-600 cursor-pointer text-white rounded-4xl hover:bg-red-700 disabled:opacity-50"
         >
           {loading ? 'Updating...' : 'Update Event'}
         </button>

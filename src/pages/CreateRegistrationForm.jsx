@@ -23,6 +23,7 @@ function CreateRegistrationForm() {
   const EventId = localStorage.getItem("selectedEvent");
   const eventname = localStorage.getItem("eventName");
 
+
   useEffect(() => {
     const savedEventId = localStorage.getItem("selectedEvent");
     const savedEventName = localStorage.getItem("eventName");
@@ -59,6 +60,7 @@ function CreateRegistrationForm() {
               f.fieldName === "ROLE" ? { ...f, options: roleOptions } : f
             );
           });
+          
         } catch (error) {
           toast.error("Failed to fetch event roles");
           console.error(error);
@@ -196,7 +198,6 @@ function CreateRegistrationForm() {
       console.error("Toggle form error:", error);
     }
   }
-  
   return (
     <div className="min-h-screen bg-gradient-to-r from-black to-gray-800 flex items-center justify-center p-6">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-3xl">
@@ -268,7 +269,7 @@ function CreateRegistrationForm() {
 
             {(field.fieldType === "checkbox" && field.fieldName === "ROLE") && field.locked && (
               <div className="mt-3">
-                <label className="block font-semibold">Select Roles</label>
+                <label className="block font-semibold">Select Passes</label>
                 <div className="space-y-2">
                   {roles.length > 0 ? (
                     roles.map((role, idx) => (
