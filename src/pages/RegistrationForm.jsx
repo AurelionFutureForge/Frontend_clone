@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { AlertTriangle, MapPin, Calendar, Clock, Timer } from 'lucide-react'
@@ -46,10 +46,17 @@ function RegistrationForm() {
         setImageContainerWidth(imageContainerRef.current.offsetWidth);
       }
     };
-    updateWidth();
+
+    const raf = requestAnimationFrame(updateWidth);
     window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', updateWidth);
+    };
   }, []);
+
+
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -360,6 +367,11 @@ function RegistrationForm() {
               src={event.companyPoster}
               alt="Company Poster"
               className="w-full h-full object-cover rounded-md"
+              onLoad={() => {
+                if (imageContainerRef.current) {
+                  setImageContainerWidth(imageContainerRef.current.offsetWidth);
+                }
+              }}
             />
           </div>
         )}
@@ -428,8 +440,9 @@ function RegistrationForm() {
 
       <div
         className="bg-white p-4 sm:p-6 shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full ml-5"
-        style={{ maxWidth: imageContainerWidth || '100%' }}
+           style={{ maxWidth: imageContainerWidth || '100%' }}
       >
+
         <form className="w-full">
           {/* Custom Fields */}
           {otherFields.map((field, idx) => (
