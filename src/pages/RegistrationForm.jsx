@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { AlertTriangle, MapPin, Calendar, Clock, Timer } from 'lucide-react'
@@ -34,9 +34,22 @@ function RegistrationForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [admin, setAdmin] = useState(null);
   const [countdown, setCountdown] = useState("");
+  const imageContainerRef = useRef(null);
+  const [imageContainerWidth, setImageContainerWidth] = useState(null);
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const { eventID } = useParams();
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (imageContainerRef.current) {
+        setImageContainerWidth(imageContainerRef.current.offsetWidth);
+      }
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -333,15 +346,16 @@ function RegistrationForm() {
     }
   };
 
-
-
   return (
     <div className="bg-gray-100 overflow-x-hidden">
       <div className="bg-gray-100 p-6 flex flex-col lg:flex-row relative">
 
         {/* 🖼️ Poster Card on Left */}
         {event.companyPoster && (
-          <div className="w-full lg:mr-[432px] bg-gray-100 shadow-lg rounded-xl p-4 mt-2 h-fit">
+          <div
+            ref={imageContainerRef}
+            className="w-full lg:mr-[432px] bg-gray-100 shadow-lg rounded-xl p-4 mt-2 h-fit"
+          >
             <img
               src={event.companyPoster}
               alt="Company Poster"
@@ -412,8 +426,10 @@ function RegistrationForm() {
 
 
 
-      <div className="bg-white p-4 sm:p-6 shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full 
-  max-w-full lg:w-[550px] xl:w-[960px] lg:ml-6 mx-auto">
+      <div
+        className="bg-white p-4 sm:p-6 shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full ml-5"
+        style={{ maxWidth: imageContainerWidth || '100%' }}
+      >
         <form className="w-full">
           {/* Custom Fields */}
           {otherFields.map((field, idx) => (
