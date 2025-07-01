@@ -8,7 +8,7 @@ function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [firstName, setFisrtName] = useState("Dhanush");
   const [lastName, setLastName] = useState("ashok");
-  const [ticket, setTicket] = useState("General Admission $500");
+  const [ticket, setTicket] = useState("General Admission 5000 INR");
   const [mail, setMail] = useState("stagynbusiness@gmail.com ");
   const eventsRef = useRef(null);
   const analyticsRef = useRef(null);
