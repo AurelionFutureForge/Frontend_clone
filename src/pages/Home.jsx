@@ -461,9 +461,9 @@ function Home() {
                   onChange={(e) => setTicket(e.target.value)}
                 >
                   <option>Select ticket type</option>
-                  <option>General Admission $500</option>
-                  <option>Speaker $299</option>
-                  <option>VIP $799</option>
+                  <option>General Admission 5000 INR</option>
+                  <option>Speaker 2990 INR</option>
+                  <option>VIP 7990 INR</option>
                 </select>
               </div>
 
