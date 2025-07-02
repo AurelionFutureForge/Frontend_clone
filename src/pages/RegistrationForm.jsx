@@ -36,6 +36,8 @@ function RegistrationForm() {
   const [countdown, setCountdown] = useState("");
   const imageContainerRef = useRef(null);
   const [imageContainerWidth, setImageContainerWidth] = useState(null);
+  const eventInfoRef = useRef(null);
+  const [eventInfoWidth, setEventInfoWidth] = useState(null); 
 
   const BASE_URL = import.meta.env.VITE_BACKEND_URL;
   const { eventID } = useParams();
@@ -55,6 +57,21 @@ function RegistrationForm() {
       window.removeEventListener('resize', updateWidth);
     };
   }, []);
+
+ useLayoutEffect(() => {
+  const updateWidth = () => {
+    if (window.innerWidth < 1024 && eventInfoRef.current) {
+      const width = eventInfoRef.current.offsetWidth;
+      setEventInfoWidth(width);
+    } else {
+      setEventInfoWidth(null);
+    }
+  };
+
+  updateWidth();
+  window.addEventListener("resize", updateWidth);
+  return () => window.removeEventListener("resize", updateWidth);
+}, []);
 
 
 
@@ -354,8 +371,8 @@ function RegistrationForm() {
   };
 
   return (
-    <div className="bg-gray-100 overflow-x-hidden">
-      <div className="bg-gray-100 p-6 flex flex-col lg:flex-row relative">
+    <div className="bg-white overflow-x-hidden">
+      <div className="bg-gray-white p-6 flex flex-col lg:flex-row gap-6">
 
         {/* 🖼️ Poster Card on Left */}
         {event.companyPoster && (
@@ -377,11 +394,12 @@ function RegistrationForm() {
         )}
 
         {/* 📝 Registration Content */}
-        <div
-          className="w-full max-w-md mx-auto lg:w-[400px] bg-white p-4 shadow-lg overflow-y-auto flex flex-col 
-      lg:mt-0 mt-6 border border-gray-400 rounded-xl
-      lg:fixed lg:right-4 lg:top-4 lg:h-[90vh]"
-        >
+<div
+  ref={eventInfoRef}
+  className="w-full max-w-md mx-auto lg:w-[400px] bg-white p-4 shadow-lg overflow-y-auto flex flex-col 
+    lg:mt-0 mt-6 border border-gray-400 rounded-xl
+    lg:fixed lg:right-4 lg:top-4 lg:h-[90vh]"
+>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-black mb-4 text-center lg:text-left">
             {event.eventName}
           </h2>
@@ -438,10 +456,23 @@ function RegistrationForm() {
 
 
 
-      <div
-        className="bg-white p-4 sm:p-6 shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl w-full ml-5"
-           style={{ maxWidth: imageContainerWidth || '100%' }}
-      >
+<div
+  className={`bg-white p-4 sm:p-6 shadow-[0_4px_24px_rgba(107,114,128,0.2)] rounded-2xl 
+    ${event.companyPoster ? "" : "lg:ml-0 lg:mr-5"} w-full mx-auto
+    lg:ml-5`} // Apply margin-left only for lg+
+  style={{
+    width:
+      event.companyPoster && window.innerWidth >= 1024 && eventInfoWidth
+        ? `${eventInfoWidth}px`
+        : "100%",
+    maxWidth:
+      window.innerWidth >= 1024
+        ? event.companyPoster
+          ? imageContainerWidth || "100%"
+          : "calc(100% - 440px)"
+        : `${eventInfoWidth}px`,
+  }}
+>
 
         <form className="w-full">
           {/* Custom Fields */}

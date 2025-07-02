@@ -541,7 +541,9 @@ function Home() {
               </div>
             </div>
 
-            {/* Product Links */}
+            
+          {/*
+            
             <div>
               <h3 className="text-lg font-semibold mb-4">Product</h3>
               <ul className="space-y-2">
@@ -552,7 +554,7 @@ function Home() {
               </ul>
             </div>
 
-            {/* Resources */}
+           
             <div>
               <h3 className="text-lg font-semibold mb-4">Resources</h3>
               <ul className="space-y-2">
@@ -563,7 +565,7 @@ function Home() {
               </ul>
             </div>
 
-            {/* Company */}
+            
             <div>
               <h3 className="text-lg font-semibold mb-4">Company</h3>
               <ul className="space-y-2">
@@ -575,7 +577,7 @@ function Home() {
             </div>
           </div>
 
-          {/* Contact Section - Below the Grid */}
+          
           <div className="mt-12 ml-14">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold mb-5">Contact</h3>
@@ -596,6 +598,7 @@ function Home() {
                 </p>
               </div>
             </div>
+            */}
           </div>
 
           {/* Footer Bottom Line */}
@@ -606,9 +609,6 @@ function Home() {
           </div>
         </div>
       </footer>
-
-
-
     </div>
   );
 }
