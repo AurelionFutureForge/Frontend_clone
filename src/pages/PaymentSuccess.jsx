@@ -39,7 +39,9 @@ function PaymentSuccess() {
 
       try {
         const companyName = event.companyName;
-        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin/${companyName}`);
+        const adminRes = await axios.get(`${BASE_URL}/admin/get-admin`, {
+          params: { companyName }
+        });
         setAdmin(adminRes.data);
         console.log("adminRes:", adminRes);
         console.log(adminRes.data);
